@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" styleClass="stage" stylesheets="@../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasGunungMas.View.StokOpnameController">
+   <children>
+      <GridPane hgap="7.0" layoutX="10.0" layoutY="10.0" vgap="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="700.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <children>
+                  <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" hgap="10.0" layoutX="86.0" layoutY="-87.0" orientation="VERTICAL" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Qty" />
+                        <Label fx:id="totalQtyLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                        <Label alignment="CENTER_RIGHT" layoutX="149.0" layoutY="10.0" prefHeight="25.0" text="Total Berat" />
+                        <Label fx:id="totalBeratLabel" alignment="CENTER" layoutX="209.0" layoutY="10.0" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Berat Asli" />
+                        <Label fx:id="totalBeratAsliLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Berat + Label" />
+                        <Label fx:id="totalBeratLabelLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                     </children>
+                  </FlowPane>
+               </children>
+            </AnchorPane>
+            <TableView fx:id="barangTable" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" GridPane.rowIndex="2">
+               <columns>
+                  <TableColumn fx:id="checkColumn" editable="false" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                  <TableColumn fx:id="kodeBarcodeColumn" prefWidth="75.0" text="Kode Barcode" />
+                  <TableColumn fx:id="namaBarangColumn" prefWidth="75.0" text="Nama Barang" />
+                  <TableColumn fx:id="keteranganColumn" prefWidth="75.0" text="Keterangan" visible="false" />
+                  <TableColumn fx:id="kodeKategoriColumn" prefWidth="75.0" text="Kode Kategori" visible="false" />
+                  <TableColumn fx:id="kodeJenisColumn" prefWidth="75.0" text="Kode Jenis" />
+                  <TableColumn fx:id="kodeGudangColumn" prefWidth="75.0" text="Kode Gudang" />
+                  <TableColumn fx:id="kodeInternColumn" prefWidth="75.0" text="Kode Intern" visible="false" />
+                  <TableColumn fx:id="kadarColumn" prefWidth="75.0" text="Kadar" />
+                  <TableColumn fx:id="beratColumn" prefWidth="75.0" text="Berat" />
+                  <TableColumn fx:id="beratAsliColumn" prefWidth="75.0" text="Berat Asli" />
+                  <TableColumn fx:id="nilaiPokokColumn" prefWidth="75.0" text="Nilai Pokok" visible="false" />
+                  <TableColumn fx:id="hargaJualColumn" prefWidth="75.0" text="Harga Jual" visible="false" />
+                  <TableColumn fx:id="userBarcodeColumn" prefWidth="75.0" text="User Input" visible="false" />
+                  <TableColumn fx:id="tglBarcodeColumn" prefWidth="75.0" text="Tgl Input" visible="false" />
+                  <TableColumn fx:id="salesStokColumn" prefWidth="75.0" text="User Stok" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TextField fx:id="kodeBarcodeField" alignment="CENTER" onAction="#stokBarcode" prefHeight="30.0" promptText="Masukan Kode Barcode" GridPane.rowIndex="1" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="noStokOpnameLabel" style="-fx-font-size: 22;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="newStokOpnameButton" layoutX="497.0" layoutY="1.0" mnemonicParsing="false" onAction="#newStokOpname" prefWidth="150.0" text="New Stok Opname" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button fx:id="lanjutStokOpnameButton" layoutX="159.0" layoutY="4.0" mnemonicParsing="false" onAction="#lanjutStokOpname" prefWidth="150.0" text="Lanjut Stok Opname" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="151.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

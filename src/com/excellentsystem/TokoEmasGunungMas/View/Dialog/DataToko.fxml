@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefWidth="500.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasGunungMas.View.Dialog.DataTokoController">
+   <children>
+      <GridPane hgap="7.0" prefWidth="544.0" vgap="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="25.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label styleClass="label-serif" text="Nama Toko" GridPane.rowIndex="2" />
+            <TextField fx:id="namaField" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="alamatField" prefHeight="30.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label styleClass="label-serif" text="Alamat" GridPane.rowIndex="3" />
+            <Label styleClass="label-serif" text="No Telp" GridPane.rowIndex="4" />
+            <TextField fx:id="noTelpField" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <AnchorPane prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="13">
+               <children>
+                  <Button layoutX="183.0" layoutY="2.0" mnemonicParsing="false" onAction="#setDataPerusahaan" prefWidth="100.0" text="Cancel" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button layoutX="133.0" layoutY="-1.0" mnemonicParsing="false" onAction="#saveDataPerusahaan" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="101.0" AnchorPane.topAnchor="-0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label style="-fx-font-size: 24;" text="Data Toko" GridPane.columnSpan="2" GridPane.halignment="LEFT" />
+            <Label text="Berat Label" GridPane.rowIndex="6" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <children>
+                  <TextField fx:id="beratLabelField" prefHeight="30.0" prefWidth="100.0" />
+                  <Label prefHeight="30.0" text="Gr" />
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Resource/Multiply_48px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Label text="Prefix Barcode" GridPane.rowIndex="7" />
+            <TextField fx:id="prefixBarcodeField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="printerPenjualanField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TextField fx:id="printerGadaiField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <TextField fx:id="printerBarcodeField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <Label text="Printer Penjualan" GridPane.rowIndex="9" />
+            <Label text="Printer Gadai" GridPane.rowIndex="10" />
+            <Label text="Printer Barcode" GridPane.rowIndex="11" />
+            <Label text="Server" GridPane.rowIndex="8" />
+            <TextField fx:id="serverField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+         </children>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </GridPane>
+   </children>
+</AnchorPane>

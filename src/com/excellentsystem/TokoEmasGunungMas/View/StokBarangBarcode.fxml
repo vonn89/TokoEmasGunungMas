@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="1000.0" styleClass="stage" stylesheets="@../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasGunungMas.View.StokBarangBarcodeController">
+   <children>
+      <GridPane hgap="7.0" layoutX="10.0" layoutY="10.0" vgap="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="760.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <AnchorPane maxHeight="25.0" prefHeight="25.0" prefWidth="200.0">
+               <children>
+                  <TextField fx:id="searchField" layoutX="827.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Label layoutY="5.0" text="Group By" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ComboBox fx:id="groupByCombo" layoutX="56.0" onAction="#getStokBarang" prefHeight="30.0" prefWidth="120.0" visibleRowCount="20" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="0.0" />
+                  <Label layoutX="199.0" layoutY="9.0" text="Tanggal Stok" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="tglPicker" editable="false" layoutX="240.0" layoutY="5.0" onAction="#getStokBarang" prefHeight="30.0" prefWidth="150.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" hgap="10.0" layoutX="86.0" layoutY="-87.0" orientation="VERTICAL" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Qty" />
+                        <Label fx:id="totalQtyLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                        <Label alignment="CENTER_RIGHT" layoutX="149.0" layoutY="10.0" prefHeight="25.0" text="Total Berat" />
+                        <Label fx:id="totalBeratLabel" alignment="CENTER" layoutX="209.0" layoutY="10.0" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Berat Asli" />
+                        <Label fx:id="totalBeratAsliLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Berat + Label" />
+                        <Label fx:id="totalBeratLabelLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
+                     </children>
+                  </FlowPane>
+               </children>
+            </AnchorPane>
+            <TreeTableView fx:id="stokBarangTable" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="1">
+               <columns>
+                  <TreeTableColumn fx:id="kodeJenisColumn" prefWidth="75.0" text="Kode Jenis" />
+                  <TreeTableColumn fx:id="stokAwalColumn" prefWidth="75.0" text="Stok Awal" />
+                  <TreeTableColumn fx:id="beratAwalColumn" prefWidth="75.0" text="Berat Awal" />
+                  <TreeTableColumn fx:id="beratAsliAwalColumn" prefWidth="75.0" text="Berat Asli Awal" visible="false" />
+                  <TreeTableColumn fx:id="beratLabelAwalColumn" prefWidth="75.0" text="Berat Label Awal" visible="false" />
+                  <TreeTableColumn fx:id="stokMasukColumn" prefWidth="75.0" text="Stok Masuk" />
+                  <TreeTableColumn fx:id="beratMasukColumn" prefWidth="75.0" text="Berat Masuk" />
+                  <TreeTableColumn fx:id="beratAsliMasukColumn" prefWidth="75.0" text="Berat Asli Masuk" visible="false" />
+                  <TreeTableColumn fx:id="beratLabelMasukColumn" prefWidth="75.0" text="Berat Label Masuk" visible="false" />
+                  <TreeTableColumn fx:id="stokKeluarColumn" prefWidth="75.0" text="Stok Keluar" />
+                  <TreeTableColumn fx:id="beratKeluarColumn" prefWidth="75.0" text="Berat Keluar" />
+                  <TreeTableColumn fx:id="beratAsliKeluarColumn" prefWidth="75.0" text="Berat Asli Keluar" visible="false" />
+                  <TreeTableColumn fx:id="beratLabelKeluarColumn" prefWidth="75.0" text="Berat Label Keluar" visible="false" />
+                  <TreeTableColumn fx:id="stokAkhirColumn" prefWidth="75.0" text="Stok Akhir" />
+                  <TreeTableColumn fx:id="beratAkhirColumn" prefWidth="75.0" text="Berat Akhir" />
+                  <TreeTableColumn fx:id="beratAsliAkhirColumn" prefWidth="75.0" text="Berat Asli Akhir" visible="false" />
+                  <TreeTableColumn fx:id="beratLabelAkhirColumn" prefWidth="75.0" text="Berat Label Akhir" visible="false" />
+               </columns>
+               <columnResizePolicy>
+                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TreeTableView>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

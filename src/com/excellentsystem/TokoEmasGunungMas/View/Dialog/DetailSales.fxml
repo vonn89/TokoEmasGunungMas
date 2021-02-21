@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="393.0" prefWidth="369.0" styleClass="dialog" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasGunungMas.View.Dialog.DetailSalesController">
+   <children>
+      <GridPane hgap="7.0" prefWidth="300.0" vgap="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="101.0" prefWidth="101.0" />
+            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <Label text="Nama" textFill="MAROON" GridPane.rowIndex="2" />
+            <Label text="Keterangan" textFill="MAROON" GridPane.rowIndex="7" />
+            <Label text="No Handphone" textFill="MAROON" GridPane.rowIndex="6" />
+            <Label text="No Telp" textFill="MAROON" GridPane.rowIndex="5" />
+            <Label text="Alamat" textFill="MAROON" GridPane.rowIndex="3" />
+            <Label style="-fx-font-size: 24;" text="Detail Sales" textFill="MAROON" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" />
+            <Label text="No Identitas" textFill="MAROON" GridPane.rowIndex="9" />
+            <AnchorPane GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="10">
+               <children>
+                  <Button fx:id="saveButton" layoutX="30.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <TextField fx:id="namaField" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextArea fx:id="alamatField" prefHeight="200.0" prefWidth="300.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2" />
+            <TextField fx:id="noTelpField" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="noHandphoneField" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="keteranganField" prefHeight="30.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="noIdentitasField" prefHeight="30.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ComboBox fx:id="identitasCombo" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label text="Identitas" textFill="MAROON" GridPane.rowIndex="8" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#closeDialog" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../Resource/Multiply_48px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

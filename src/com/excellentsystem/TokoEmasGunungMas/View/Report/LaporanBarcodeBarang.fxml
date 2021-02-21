@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="600" prefWidth="1024.0" styleClass="stage" stylesheets="@../../Resource/MyTheme.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.excellentsystem.TokoEmasGunungMas.View.Report.LaporanBarcodeBarangController">
+    <children>
+      <GridPane hgap="7.0" layoutX="122.0" layoutY="100.0" vgap="7.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="7.0" prefHeight="25.0" prefWidth="70.0" text="Tanggal" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="tglStartPicker" layoutX="78.0" layoutY="4.0" onAction="#getBarcodeBarang" prefHeight="30.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="0.0" />
+                  <Label alignment="CENTER" layoutX="232.0" layoutY="4.0" prefHeight="25.0" prefWidth="25.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="220.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="tglAkhirPicker" layoutX="238.0" onAction="#getBarcodeBarang" prefHeight="25.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="245.0" AnchorPane.topAnchor="0.0" />
+                  <TextField fx:id="searchField" layoutX="831.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ComboBox fx:id="groupByCombo" layoutX="464.0" layoutY="2.0" onAction="#getBarcodeBarang" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="0.0" />
+                  <Label layoutX="406.0" layoutY="11.0" text="Group By" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="405.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
+               <children>
+                  <Label prefHeight="30.0" text="Total Qty" />
+                  <Label fx:id="totalQtyField" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label prefHeight="30.0" text="Total Berat" />
+                  <Label fx:id="totalBeratField" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label layoutX="754.0" layoutY="10.0" prefHeight="30.0" text="Total Berat Asli" />
+                  <Label fx:id="totalBeratAsliField" layoutX="854.0" layoutY="10.0" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
+               </children>
+            </HBox>
+            <TreeTableView fx:id="barcodeBarangHeadTable" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="1">
+               <columns>
+                  <TreeTableColumn fx:id="kodeBarcodeColumn" prefWidth="75.0" text="Kode Barcode" />
+                  <TreeTableColumn fx:id="tglBarcodeColumn" prefWidth="75.0" text="Tgl Barcode" />
+                  <TreeTableColumn fx:id="namaBarangColumn" prefWidth="75.0" text="Nama Barang" />
+                  <TreeTableColumn fx:id="keteranganColumn" prefWidth="75.0" text="Keterangan" visible="false" />
+                  <TreeTableColumn fx:id="kodeKategoriColumn" prefWidth="75.0" text="Kode Kategori" />
+                  <TreeTableColumn fx:id="kodeJenisColumn" prefWidth="75.0" text="Kode Jenis" />
+                  <TreeTableColumn fx:id="kodeGudangColumn" prefWidth="75.0" text="Kode Gudang" visible="false" />
+                  <TreeTableColumn fx:id="kodeInternColumn" prefWidth="75.0" text="Kode Intern" visible="false" />
+                  <TreeTableColumn fx:id="kadarColumn" prefWidth="75.0" text="Kadar" visible="false" />
+                  <TreeTableColumn fx:id="beratColumn" prefWidth="75.0" text="Berat" />
+                  <TreeTableColumn fx:id="beratAsliColumn" prefWidth="75.0" text="Berat Asli" />
+                  <TreeTableColumn fx:id="nilaiPokokColumn" prefWidth="75.0" text="Nilai Pokok" visible="false" />
+                  <TreeTableColumn fx:id="hargaJualColumn" prefWidth="75.0" text="Harga Jual" visible="false" />
+                  <TreeTableColumn fx:id="userBarcodeColumn" prefWidth="75.0" text="User Barcode" />
+                  <TreeTableColumn fx:id="statusBarangColumn" prefWidth="75.0" text="Status Barang" />
+               </columns>
+               <columnResizePolicy>
+                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TreeTableView>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
