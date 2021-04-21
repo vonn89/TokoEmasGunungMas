@@ -533,7 +533,6 @@ public class DetailGadaiController {
                     }
                 }
                 mainApp.closeDialog(owner, stage);
-                mainApp.showDataTerimaGadai();
                 mainApp.showMessage(Modality.NONE, "Success", "Terima Gadai berhasil disimpan");
             } else {
                 mainApp.showMessage(Modality.NONE, "Error", status);

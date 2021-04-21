@@ -1,6 +1,7 @@
 package com.excellentsystem.TokoEmasGunungMas;
 
 import static com.excellentsystem.TokoEmasGunungMas.Main.ipServer;
+import static com.excellentsystem.TokoEmasGunungMas.Main.kodeToko;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -16,9 +17,9 @@ import java.sql.DriverManager;
 public class Koneksi {
 
     public static Connection getConnection() throws Exception {
-        String DbName = "jdbc:mysql://" + ipServer + ":3306/tokoemas?"
+        String DbName = "jdbc:mysql://" + ipServer + ":3306/tokoemasgunungmas_"+kodeToko+"?"
                 + "connectTimeout=0&socketTimeout=0&autoReconnect=true";
         Class.forName("com.mysql.jdbc.Driver");
-        return DriverManager.getConnection(DbName, "jago_admin", "jagopusat");
+        return DriverManager.getConnection(DbName, "admin", "excellentsystem");
     }
 }

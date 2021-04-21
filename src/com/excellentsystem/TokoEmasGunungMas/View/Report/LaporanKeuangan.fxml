@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -46,17 +47,23 @@
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TreeTableView>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2147483647">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnSpan="2147483647">
                <children>
-                  <TextField fx:id="searchField" layoutX="-349.0" layoutY="4.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <Label layoutX="698.0" layoutY="8.0" text="Tanggal" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Label text="Tanggal">
                    
                   </Label>
-                  <DatePicker fx:id="tglMulaiPicker" editable="false" layoutX="68.0" layoutY="4.0" onAction="#getKeuangan" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="0.0" />
-                  <Label alignment="CENTER" layoutX="218.0" layoutY="6.0" prefWidth="20.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="215.0" AnchorPane.topAnchor="0.0" />
-                  <DatePicker fx:id="tglAkhirPicker" layoutX="228.0" layoutY="2.0" onAction="#getKeuangan" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="tglMulaiPicker" editable="false" onAction="#getKeuangan" prefHeight="30.0" prefWidth="120.0" />
+                  <Label alignment="CENTER" prefWidth="20.0" text="-" />
+                  <DatePicker fx:id="tglAkhirPicker" onAction="#getKeuangan" prefHeight="30.0" prefWidth="120.0" />
+                  <Label text="Group By" />
+                  <ComboBox fx:id="groupByCombo" onAction="#getKeuangan" prefWidth="150.0" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextField fx:id="searchField" prefHeight="30.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" />
+                     </children>
+                  </HBox>
                </children>
-            </AnchorPane>
+            </HBox>
          </children>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

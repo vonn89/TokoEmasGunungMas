@@ -7,7 +7,6 @@ package com.excellentsystem.TokoEmasGunungMas.Model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import com.excellentsystem.TokoEmasGunungMas.Model.Barang;
 
 /**
  *
@@ -18,7 +17,16 @@ public class CetakBarcodeDetail {
     private final StringProperty noCetak = new SimpleStringProperty();
     private final StringProperty kodeBarcode = new SimpleStringProperty();
     private Barang barang;
+    private CetakBarcodeHead cetakBarcodeHead;
 
+    public CetakBarcodeHead getCetakBarcodeHead() {
+        return cetakBarcodeHead;
+    }
+
+    public void setCetakBarcodeHead(CetakBarcodeHead cetakBarcodeHead) {
+        this.cetakBarcodeHead = cetakBarcodeHead;
+    }
+    
     public Barang getBarang() {
         return barang;
     }

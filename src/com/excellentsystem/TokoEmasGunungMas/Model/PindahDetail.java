@@ -18,7 +18,16 @@ public class PindahDetail {
     private final StringProperty kodeBarcode = new SimpleStringProperty();
     private final StringProperty gudangAsal = new SimpleStringProperty();
     private Barang barang;
+    private PindahHead pindahHead;
 
+    public PindahHead getPindahHead() {
+        return pindahHead;
+    }
+
+    public void setPindahHead(PindahHead pindahHead) {
+        this.pindahHead = pindahHead;
+    }
+    
     public String getGudangAsal() {
         return gudangAsal.get();
     }

@@ -41,15 +41,16 @@ public class BarangDAO {
             b.setKadar(rs.getString(8));
             b.setBerat(rs.getDouble(9));
             b.setBeratAsli(rs.getDouble(10));
-            b.setNilaiPokok(rs.getDouble(11));
-            b.setHargaJual(rs.getDouble(12));
-            b.setStatusBarang(rs.getString(13));
-            b.setBarcodeDate(rs.getString(14));
-            b.setBarcodeBy(rs.getString(15));
-            b.setDeletedDate(rs.getString(16));
-            b.setDeletedBy(rs.getString(17));
-            b.setSoldDate(rs.getString(18));
-            b.setSoldBy(rs.getString(19));
+            b.setBeratKemasan(rs.getDouble(11));
+            b.setNilaiPokok(rs.getDouble(12));
+            b.setHargaJual(rs.getDouble(13));
+            b.setStatusBarang(rs.getString(14));
+            b.setBarcodeDate(rs.getString(15));
+            b.setBarcodeBy(rs.getString(16));
+            b.setDeletedDate(rs.getString(17));
+            b.setDeletedBy(rs.getString(18));
+            b.setSoldDate(rs.getString(19));
+            b.setSoldBy(rs.getString(20));
             allBarang.add(b);
         }
         return allBarang;
@@ -88,18 +89,31 @@ public class BarangDAO {
             b.setKadar(rs.getString(8));
             b.setBerat(rs.getDouble(9));
             b.setBeratAsli(rs.getDouble(10));
-            b.setNilaiPokok(rs.getDouble(11));
-            b.setHargaJual(rs.getDouble(12));
-            b.setStatusBarang(rs.getString(13));
-            b.setBarcodeDate(rs.getString(14));
-            b.setBarcodeBy(rs.getString(15));
-            b.setDeletedDate(rs.getString(16));
-            b.setDeletedBy(rs.getString(17));
-            b.setSoldDate(rs.getString(18));
-            b.setSoldBy(rs.getString(19));
+            b.setBeratKemasan(rs.getDouble(11));
+            b.setNilaiPokok(rs.getDouble(12));
+            b.setHargaJual(rs.getDouble(13));
+            b.setStatusBarang(rs.getString(14));
+            b.setBarcodeDate(rs.getString(15));
+            b.setBarcodeBy(rs.getString(16));
+            b.setDeletedDate(rs.getString(17));
+            b.setDeletedBy(rs.getString(18));
+            b.setSoldDate(rs.getString(19));
+            b.setSoldBy(rs.getString(20));
             allBarang.add(b);
         }
         return allBarang;
+    }
+
+    public static Boolean checkKodeKemasan(Connection con, String kodeKemasan) throws Exception {
+        PreparedStatement ps = con.prepareStatement("select * from tm_barang "
+                + "where kode_kemasan = ?  and status_barang = 'Tersedia'");
+        ps.setString(1, kodeKemasan);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static Barang get(Connection con, String kodeBarcode) throws Exception {
@@ -119,15 +133,16 @@ public class BarangDAO {
             b.setKadar(rs.getString(8));
             b.setBerat(rs.getDouble(9));
             b.setBeratAsli(rs.getDouble(10));
-            b.setNilaiPokok(rs.getDouble(11));
-            b.setHargaJual(rs.getDouble(12));
-            b.setStatusBarang(rs.getString(13));
-            b.setBarcodeDate(rs.getString(14));
-            b.setBarcodeBy(rs.getString(15));
-            b.setDeletedDate(rs.getString(16));
-            b.setDeletedBy(rs.getString(17));
-            b.setSoldDate(rs.getString(18));
-            b.setSoldBy(rs.getString(19));
+            b.setBeratKemasan(rs.getDouble(11));
+            b.setNilaiPokok(rs.getDouble(12));
+            b.setHargaJual(rs.getDouble(13));
+            b.setStatusBarang(rs.getString(14));
+            b.setBarcodeDate(rs.getString(15));
+            b.setBarcodeBy(rs.getString(16));
+            b.setDeletedDate(rs.getString(17));
+            b.setDeletedBy(rs.getString(18));
+            b.setSoldDate(rs.getString(19));
+            b.setSoldBy(rs.getString(20));
         }
         return b;
     }
@@ -159,8 +174,8 @@ public class BarangDAO {
 
     public static void update(Connection con, Barang b) throws Exception {
         PreparedStatement ps = con.prepareStatement("update tm_barang set "
-                + " nama_barang=?, keterangan=?, kode_kategori=?, kode_jenis=?, kode_gudang=?,"
-                + " kode_intern=?, kadar=?, berat=?, berat_asli=?, nilai_pokok=?, harga_jual=?,"
+                + " nama_barang=?, keterangan=?, kode_kategori=?, kode_jenis=?, kode_gudang=?, "
+                + " kode_intern=?, kadar=?, berat=?, berat_asli=?, berat_kemasan=?, nilai_pokok=?, harga_jual=?,"
                 + " status_barang=?, barcode_date=?, barcode_by=?,deleted_date=?, deleted_by=?,"
                 + " sold_date=?, sold_by=? where kode_barcode=?");
         ps.setString(1, b.getNamaBarang());
@@ -172,21 +187,22 @@ public class BarangDAO {
         ps.setString(7, b.getKadar());
         ps.setDouble(8, b.getBerat());
         ps.setDouble(9, b.getBeratAsli());
-        ps.setDouble(10, b.getNilaiPokok());
-        ps.setDouble(11, b.getHargaJual());
-        ps.setString(12, b.getStatusBarang());
-        ps.setString(13, b.getBarcodeDate());
-        ps.setString(14, b.getBarcodeBy());
-        ps.setString(15, b.getDeletedDate());
-        ps.setString(16, b.getDeletedBy());
-        ps.setString(17, b.getSoldDate());
-        ps.setString(18, b.getSoldBy());
-        ps.setString(19, b.getKodeBarcode());
+        ps.setDouble(10, b.getBeratKemasan());
+        ps.setDouble(11, b.getNilaiPokok());
+        ps.setDouble(12, b.getHargaJual());
+        ps.setString(13, b.getStatusBarang());
+        ps.setString(14, b.getBarcodeDate());
+        ps.setString(15, b.getBarcodeBy());
+        ps.setString(16, b.getDeletedDate());
+        ps.setString(17, b.getDeletedBy());
+        ps.setString(18, b.getSoldDate());
+        ps.setString(19, b.getSoldBy());
+        ps.setString(20, b.getKodeBarcode());
         ps.executeUpdate();
     }
 
     public static void insert(Connection con, Barang b) throws Exception {
-        PreparedStatement ps = con.prepareStatement("insert into tm_barang values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        PreparedStatement ps = con.prepareStatement("insert into tm_barang values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         ps.setString(1, b.getKodeBarcode());
         ps.setString(2, b.getNamaBarang());
         ps.setString(3, b.getKeterangan());
@@ -197,15 +213,16 @@ public class BarangDAO {
         ps.setString(8, b.getKadar());
         ps.setDouble(9, b.getBerat());
         ps.setDouble(10, b.getBeratAsli());
-        ps.setDouble(11, b.getNilaiPokok());
-        ps.setDouble(12, b.getHargaJual());
-        ps.setString(13, b.getStatusBarang());
-        ps.setString(14, b.getBarcodeDate());
-        ps.setString(15, b.getBarcodeBy());
-        ps.setString(16, b.getDeletedDate());
-        ps.setString(17, b.getDeletedBy());
-        ps.setString(18, b.getSoldDate());
-        ps.setString(19, b.getSoldBy());
+        ps.setDouble(11, b.getBeratKemasan());
+        ps.setDouble(12, b.getNilaiPokok());
+        ps.setDouble(13, b.getHargaJual());
+        ps.setString(14, b.getStatusBarang());
+        ps.setString(15, b.getBarcodeDate());
+        ps.setString(16, b.getBarcodeBy());
+        ps.setString(17, b.getDeletedDate());
+        ps.setString(18, b.getDeletedBy());
+        ps.setString(19, b.getSoldDate());
+        ps.setString(20, b.getSoldBy());
         ps.executeUpdate();
     }
 }

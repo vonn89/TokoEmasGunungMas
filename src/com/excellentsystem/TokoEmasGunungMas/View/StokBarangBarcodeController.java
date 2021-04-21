@@ -12,6 +12,7 @@ import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
 import com.excellentsystem.TokoEmasGunungMas.Model.StokBarang;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DetailGroupBarangController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.KartuStokController;
 import java.sql.Connection;
@@ -96,17 +97,12 @@ public class StokBarangBarcodeController {
     private Label totalQtyLabel;
     @FXML
     private Label totalBeratLabel;
-    @FXML
-    private Label totalBeratAsliLabel;
-    @FXML
-    private Label totalBeratLabelLabel;
 
     private Main mainApp;
     final TreeItem<StokBarang> root = new TreeItem<>();
     private final ObservableList<String> allStatus = FXCollections.observableArrayList();
     private final ObservableList<StokBarang> allStokBarang = FXCollections.observableArrayList();
     private final ObservableList<StokBarang> filterData = FXCollections.observableArrayList();
-
 
     public void initialize() {
         kodeJenisColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kodeJenisProperty());
@@ -179,11 +175,15 @@ public class StokBarangBarcodeController {
         });
 
         final ContextMenu rowMenu = new ContextMenu();
+        MenuItem laporan = new MenuItem("Print Laporan");
+        laporan.setOnAction((ActionEvent event) -> {
+            printLaporan();
+        });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
             getStokBarang();
         });
-        rowMenu.getItems().addAll(refresh);
+        rowMenu.getItems().addAll(laporan, refresh);
 
         stokBarangTable.setContextMenu(rowMenu);
         stokBarangTable.setRowFactory(ttv -> {
@@ -203,11 +203,15 @@ public class StokBarangBarcodeController {
                         cekKartuStok.setOnAction((ActionEvent e) -> {
                             showKartuStok(item);
                         });
+                        MenuItem laporan = new MenuItem("Print Laporan");
+                        laporan.setOnAction((ActionEvent event) -> {
+                            printLaporan();
+                        });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent event) -> {
                             getStokBarang();
                         });
-                        rowMenu.getItems().addAll(cek, cekKartuStok, refresh);
+                        rowMenu.getItems().addAll(cek, cekKartuStok, laporan, refresh);
 
                         setContextMenu(rowMenu);
                     }
@@ -239,14 +243,16 @@ public class StokBarangBarcodeController {
 
     @FXML
     private void getStokBarang() {
-        try(Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             allStokBarang.clear();
             if (groupByCombo.getSelectionModel().getSelectedItem().equals("Gudang")) {
-                allStokBarang.addAll(StokBarangDAO.getStokBarcodeGroupByGudangDate(con,
-                        tglPicker.getValue().toString()));
+                List<StokBarang> listStok = StokBarangDAO.getStokBarcodeGroupByGudangDate(con,
+                        tglPicker.getValue().toString());
+                allStokBarang.addAll(listStok);
             } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Kategori")) {
-                allStokBarang.addAll(StokBarangDAO.getStokBarcodeGroupByKategoriDate(con, 
-                        tglPicker.getValue().toString()));
+                List<StokBarang> listStok = StokBarangDAO.getStokBarcodeGroupByKategoriDate(con,
+                        tglPicker.getValue().toString());
+                allStokBarang.addAll(listStok);
             }
 
         } catch (Exception e) {
@@ -369,16 +375,12 @@ public class StokBarangBarcodeController {
     private void hitungTotal() {
         int totalQty = 0;
         double totalBerat = 0;
-        double totalBeratAsli = 0;
         for (StokBarang b : filterData) {
             totalQty = totalQty + b.getStokAkhir();
             totalBerat = totalBerat + b.getBeratAkhir();
-            totalBeratAsli = totalBeratAsli + b.getBeratAsliAkhir();
         }
         totalQtyLabel.setText(gr.format(totalQty));
         totalBeratLabel.setText(gr.format(totalBerat));
-        totalBeratAsliLabel.setText(gr.format(totalBeratAsli));
-        totalBeratLabelLabel.setText(gr.format(totalBeratAsli + (totalQty * Main.sistem.getBeratLabel())));
     }
 
     private void showDetail(StokBarang s) {
@@ -419,6 +421,16 @@ public class StokBarangBarcodeController {
             } else {
                 x.setBarang("", s.getKodeJenis(), "");
             }
+        }
+    }
+
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanStokBarang(filterData, tglPicker.getValue().toString(), groupByCombo.getSelectionModel().getSelectedItem(), searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
 }

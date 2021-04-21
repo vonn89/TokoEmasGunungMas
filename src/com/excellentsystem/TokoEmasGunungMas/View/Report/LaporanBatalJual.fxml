@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -35,8 +34,6 @@
                   <Label layoutX="214.0" layoutY="8.0" text="-" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <DatePicker fx:id="akhirTglPicker" layoutX="224.0" layoutY="4.0" onAction="#getPenjualan" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="225.0" AnchorPane.topAnchor="0.0" />
                   <TextField fx:id="searchField" layoutX="831.0" layoutY="4.0" prefWidth="300.0" promptText="Search..." styleClass="search-field" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <Label layoutX="383.0" layoutY="6.0" text="Group By" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0" />
-                  <ComboBox fx:id="groupByCombo" layoutX="449.0" layoutY="4.0" onAction="#getPenjualan" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="445.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">

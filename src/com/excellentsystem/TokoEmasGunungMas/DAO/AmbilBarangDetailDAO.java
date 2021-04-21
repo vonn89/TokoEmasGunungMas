@@ -20,7 +20,7 @@ public class AmbilBarangDetailDAO {
 
     public static List<AmbilBarangDetail> getAllByTglAmbil(Connection con, String tglMulai, String tglAkhir) throws Exception {
         PreparedStatement ps = con.prepareStatement("select * from tt_ambil_barang_detail "
-                + " where no_ambil in ( select no_ambil from tt_ambil_barang_head left(tgl_ambil,10) between ? and ? )");
+                + " where no_ambil in ( select no_ambil from tt_ambil_barang_head where left(tgl_ambil,10) between ? and ? )");
         ps.setString(1, tglMulai);
         ps.setString(2, tglAkhir);
         ResultSet rs = ps.executeQuery();

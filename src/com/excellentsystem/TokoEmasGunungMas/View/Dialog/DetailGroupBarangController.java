@@ -62,6 +62,8 @@ public class DetailGroupBarangController {
     @FXML
     private TableColumn<StokBarang, Number> beratAsliColumn;
     @FXML
+    private TableColumn<StokBarang, Number> beratKemasanColumn;
+    @FXML
     private TextField searchField;
     @FXML
     private Label kodeGroup;
@@ -98,6 +100,8 @@ public class DetailGroupBarangController {
         beratColumn.setCellFactory(col -> getTableCell(gr));
         beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().beratAsliProperty());
         beratAsliColumn.setCellFactory(col -> getTableCell(gr));
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> getTableCell(gr));
 
         allBarang.addListener((ListChangeListener.Change<? extends StokBarang> change) -> {
             searchStokBarang();
@@ -151,11 +155,11 @@ public class DetailGroupBarangController {
     }
 
     public void setBarang(String kodeGudang, String kodeKategori, String kodeJenis, String tgl) {
-        try(Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             kodeGroup.setText(kodeGudang + " " + kodeKategori + " " + kodeJenis);
             tanggal.setText(tglNormal.format(tglBarang.parse(tgl)));
             allBarang.clear();
-            List<StokBarang> x = StokBarangDAO.getAllStokBarcode(con, 
+            List<StokBarang> x = StokBarangDAO.getAllStokBarcode(con,
                     tgl, kodeGudang, kodeKategori, kodeJenis);
             for (StokBarang s : x) {
                 if (s.getStokAkhir() == 1) {
@@ -198,6 +202,7 @@ public class DetailGroupBarangController {
                             || checkColumn(temp.getBarang().getKeterangan())
                             || checkColumn(temp.getBarang().getKodeIntern())
                             || checkColumn(temp.getBarang().getKadar())
+                            || checkColumn(gr.format(temp.getBarang().getBeratKemasan()))
                             || checkColumn(gr.format(temp.getBarang().getBerat()))
                             || checkColumn(gr.format(temp.getBarang().getBeratAsli()))) {
                         filterData.add(temp);
@@ -211,10 +216,12 @@ public class DetailGroupBarangController {
     }
 
     private void hitungTotal() {
+        double totalBeratAll = 0;
         double beratAsli = 0;
         double berat = 0;
         int qty = 0;
         for (StokBarang b : filterData) {
+            totalBeratAll = totalBeratAll + b.getBeratAsliAkhir() + b.getBarang().getBeratKemasan();
             beratAsli = beratAsli + b.getBeratAsliAkhir();
             berat = berat + b.getBeratAkhir();
             qty = qty + b.getStokAkhir();
@@ -222,9 +229,9 @@ public class DetailGroupBarangController {
         totalBerat.setText(gr.format(berat));
         totalQty.setText(gr.format(qty));
         totalBeratAsli.setText(gr.format(beratAsli));
-        totalBeratLabel.setText(gr.format(beratAsli + (qty * Main.sistem.getBeratLabel())));
+        totalBeratLabel.setText(gr.format(totalBeratAll + (qty * Main.sistem.getBeratLabel())));
         if (beratGudang != 0) {
-            beratTotalLabel.setText(gr.format(beratAsli + (qty * Main.sistem.getBeratLabel()) + beratGudang));
+            beratTotalLabel.setText(gr.format(totalBeratAll + (qty * Main.sistem.getBeratLabel()) + beratGudang));
             beratTotalLabel.setVisible(true);
             beratTotal2Label.setVisible(true);
         }

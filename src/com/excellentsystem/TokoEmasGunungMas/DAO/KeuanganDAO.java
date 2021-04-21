@@ -88,7 +88,7 @@ public class KeuanganDAO {
     }
     public static Keuangan get(Connection con, String kategori, String deskripsi, double jumlahRp) throws Exception {
         PreparedStatement ps = con.prepareStatement("select * from tt_keuangan "
-                + " where kategori = ? and deskripsi = ? and jumlah_rp = ? ");
+                + " where kategori = ? and keterangan = ? and jumlah_rp = ? ");
         ps.setString(1, kategori);
         ps.setString(2, deskripsi);
         ps.setDouble(3, jumlahRp);

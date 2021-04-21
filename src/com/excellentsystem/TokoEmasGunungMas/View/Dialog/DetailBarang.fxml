@@ -93,6 +93,8 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Label text="Berat Kemasan" GridPane.rowIndex="13" />
+            <TextField fx:id="beratKemasanField" prefHeight="30.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
          </children>
       </GridPane>
    </children>

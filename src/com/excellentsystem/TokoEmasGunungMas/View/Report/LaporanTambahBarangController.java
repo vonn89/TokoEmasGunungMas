@@ -8,6 +8,8 @@ package com.excellentsystem.TokoEmasGunungMas.View.Report;
 import com.excellentsystem.TokoEmasGunungMas.DAO.JenisDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.TambahBarangDetailDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.TambahBarangHeadDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTreeTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
@@ -16,10 +18,9 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
 import com.excellentsystem.TokoEmasGunungMas.Model.Jenis;
 import com.excellentsystem.TokoEmasGunungMas.Model.TambahBarangDetail;
 import com.excellentsystem.TokoEmasGunungMas.Model.TambahBarangHead;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import java.sql.Connection;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,19 +28,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -92,159 +93,79 @@ public class LaporanTambahBarangController {
 
     public void initialize() {
         noTambahBarangColumn.setCellValueFactory(param -> param.getValue().getValue().noTambahProperty());
+        
         tglTambahBarangColumn.setCellValueFactory(cellData -> {
             try {
-                return new SimpleStringProperty(
-                        tglLengkap.format(
-                                tglSql.parse(cellData.getValue().getValue().getTambahBarang().getTglTambah())));
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTambahBarang().getTglTambah())));
             } catch (Exception ex) {
                 return null;
             }
         });
+        tglTambahBarangColumn.setComparator(Function.sortDate(tglLengkap));
+        
         keteranganColumn.setCellValueFactory(param -> param.getValue().getValue().getTambahBarang().keteranganProperty());
+        
         kodeUserColumn.setCellValueFactory(param -> param.getValue().getValue().getTambahBarang().kodeUserProperty());
+        
         totalQtyColumn.setCellValueFactory(param -> param.getValue().getValue().getTambahBarang().totalBeratProperty());
-        totalQtyColumn.setCellFactory(col -> new TreeTableCell<TambahBarangDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        totalQtyColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         totalBeratColumn.setCellValueFactory(param -> param.getValue().getValue().getTambahBarang().totalBeratProperty());
-        totalBeratColumn.setCellFactory(col -> new TreeTableCell<TambahBarangDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        totalBeratColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         namaJenisColumn.setCellValueFactory(param -> param.getValue().getValue().getJenis().namaJenisProperty());
+        
         kodeKategoriColumn.setCellValueFactory(param -> param.getValue().getValue().kodeKategoriProperty());
+        
         kodeJenisColumn.setCellValueFactory(param -> param.getValue().getValue().kodeJenisProperty());
+        
         beratColumn.setCellValueFactory(param -> param.getValue().getValue().beratProperty());
-        beratColumn.setCellFactory(col -> new TreeTableCell<TambahBarangDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        beratColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         qtyColumn.setCellValueFactory(param -> param.getValue().getValue().qtyProperty());
-        qtyColumn.setCellFactory(col -> new TreeTableCell<TambahBarangDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
+        qtyColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
+        mulaiTglPicker.setConverter(Function.getTglConverter());
+        mulaiTglPicker.setValue(LocalDate.now());
+        mulaiTglPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(akhirTglPicker));
+        akhirTglPicker.setConverter(Function.getTglConverter());
+        akhirTglPicker.setValue(LocalDate.now());
+        akhirTglPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(mulaiTglPicker));
+        
+        final ContextMenu rowMenu = new ContextMenu();
+        MenuItem cetak = new MenuItem("Print Laporan");
+        cetak.setOnAction((ActionEvent e) -> {
+            printLaporan();
         });
-        mulaiTglPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            getTambahBarang();
         });
-        mulaiTglPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        mulaiTglPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isAfter(akhirTglPicker.getValue())) {
-                            this.setDisable(true);
-                        }
+        rowMenu.getItems().addAll(cetak, refresh);
+        tambahBarangTable.setContextMenu(rowMenu);
+        tambahBarangTable.setRowFactory(table -> {
+            TreeTableRow<TambahBarangDetail> row = new TreeTableRow<TambahBarangDetail>() {
+                @Override
+                public void updateItem(TambahBarangDetail item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(rowMenu);
+                    } else {
+                        final ContextMenu rowMenu = new ContextMenu();
+                        MenuItem cetak = new MenuItem("Print Laporan");
+                        cetak.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
+                        MenuItem refresh = new MenuItem("Refresh");
+                        refresh.setOnAction((ActionEvent event) -> {
+                            getTambahBarang();
+                        });
+                        rowMenu.getItems().addAll(cetak, refresh);
+                        setContextMenu(rowMenu);
                     }
-                };
-            }
-        });
-        akhirTglPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
                 }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-        akhirTglPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        akhirTglPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isBefore(mulaiTglPicker.getValue())) {
-                            this.setDisable(true);
-                        }
-                    }
-                };
-            }
+            };
+            return row;
         });
         allTambahBarang.addListener((ListChangeListener.Change<? extends TambahBarangDetail> change) -> {
             searchTambahBarangDetail();
@@ -430,4 +351,14 @@ public class LaporanTambahBarangController {
         totalQtyField.setText(gr.format(totalQty));
     }
 
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanTambahBarang(filterData, mulaiTglPicker.getValue().toString(),
+                    akhirTglPicker.getValue().toString(), groupByCombo.getSelectionModel().getSelectedItem(), searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
+    }
 }

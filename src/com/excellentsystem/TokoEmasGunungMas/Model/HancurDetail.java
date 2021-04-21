@@ -7,7 +7,6 @@ package com.excellentsystem.TokoEmasGunungMas.Model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import com.excellentsystem.TokoEmasGunungMas.Model.Barang;
 
 /**
  *
@@ -18,7 +17,16 @@ public class HancurDetail {
     private final StringProperty noHancur = new SimpleStringProperty();
     private final StringProperty kodeBarcode = new SimpleStringProperty();
     private Barang barang;
+    private HancurHead hancurHead;
 
+    public HancurHead getHancurHead() {
+        return hancurHead;
+    }
+
+    public void setHancurHead(HancurHead hancurHead) {
+        this.hancurHead = hancurHead;
+    }
+    
     public Barang getBarang() {
         return barang;
     }

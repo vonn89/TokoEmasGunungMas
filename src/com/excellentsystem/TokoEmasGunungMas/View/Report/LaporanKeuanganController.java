@@ -6,6 +6,8 @@
 package com.excellentsystem.TokoEmasGunungMas.View.Report;
 
 import com.excellentsystem.TokoEmasGunungMas.DAO.KeuanganDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTreeTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
@@ -13,10 +15,9 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.rp;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
 import com.excellentsystem.TokoEmasGunungMas.Model.Keuangan;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import java.sql.Connection;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,17 +25,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -58,6 +61,8 @@ public class LaporanKeuanganController {
     @FXML
     private TreeTableColumn<Keuangan, String> kodeUserColumn;
     @FXML
+    private ComboBox<String> groupByCombo;
+    @FXML
     private TextField searchField;
     @FXML
     private Label saldoAwalField;
@@ -74,9 +79,13 @@ public class LaporanKeuanganController {
 
     public void initialize() {
         noKeuanganColumn.setCellValueFactory(param -> param.getValue().getValue().noKeuanganProperty());
+
         kategoriColumn.setCellValueFactory(param -> param.getValue().getValue().kategoriProperty());
+
         deskripsiColumn.setCellValueFactory(param -> param.getValue().getValue().deskripsiProperty());
+
         kodeUserColumn.setCellValueFactory(param -> param.getValue().getValue().kodeUserProperty());
+
         tglKeuanganColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getTglKeuangan())));
@@ -84,100 +93,54 @@ public class LaporanKeuanganController {
                 return null;
             }
         });
+        tglKeuanganColumn.setComparator(Function.sortDate(tglLengkap));
+
         jumlahRpColumn.setCellValueFactory(param -> param.getValue().getValue().jumlahRpProperty());
-        jumlahRpColumn.setCellFactory(col -> new TreeTableCell<Keuangan, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
-        tglMulaiPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        jumlahRpColumn.setCellFactory(col -> getTreeTableCell(rp));
 
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
+        tglMulaiPicker.setConverter(Function.getTglConverter());
+        tglMulaiPicker.setValue(LocalDate.now());
+        tglMulaiPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
+        tglAkhirPicker.setConverter(Function.getTglConverter());
+        tglAkhirPicker.setValue(LocalDate.now());
+        tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglMulaiPicker));
 
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+        final ContextMenu rowMenu = new ContextMenu();
+        MenuItem cetak = new MenuItem("Print Laporan");
+        cetak.setOnAction((ActionEvent e) -> {
+            printLaporan();
         });
-        tglMulaiPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglMulaiPicker.setDayCellFactory((final DatePicker datePicker) -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                DayOfWeek day = DayOfWeek.from(item);
-                if (day == DayOfWeek.SUNDAY) {
-                    this.setStyle("-fx-background-color: derive(RED, 150%);");
-                }
-                if (item.equals(LocalDate.now())) {
-                    this.setStyle(" -fx-font-weight:bold;");
-                }
-                if (item.isAfter(LocalDate.now())) {
-                    this.setDisable(true);
-                }
-                if (item.isAfter(tglAkhirPicker.getValue())) {
-                    this.setDisable(true);
-                }
-            }
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            getKeuangan();
         });
-        tglAkhirPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        rowMenu.getItems().addAll(cetak, refresh);
+        keuanganTable.setContextMenu(rowMenu);
+        keuanganTable.setRowFactory(table -> {
+            TreeTableRow<Keuangan> row = new TreeTableRow<Keuangan>() {
+                @Override
+                public void updateItem(Keuangan item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(rowMenu);
+                    } else {
+                        final ContextMenu rowMenu = new ContextMenu();
+                        MenuItem cetak = new MenuItem("Print Laporan");
+                        cetak.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
+                        MenuItem refresh = new MenuItem("Refresh");
+                        refresh.setOnAction((ActionEvent event) -> {
+                            getKeuangan();
+                        });
+                        rowMenu.getItems().addAll(cetak, refresh);
+                        setContextMenu(rowMenu);
+                    }
+                }
+            };
+            return row;
+        });
 
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-        tglAkhirPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                DayOfWeek day = DayOfWeek.from(item);
-                if (day == DayOfWeek.SUNDAY) {
-                    this.setStyle("-fx-background-color: derive(RED, 150%);");
-                }
-                if (item.equals(LocalDate.now())) {
-                    this.setStyle(" -fx-font-weight:bold;");
-                }
-                if (item.isAfter(LocalDate.now())) {
-                    this.setDisable(true);
-                }
-                if (item.isBefore(tglMulaiPicker.getValue())) {
-                    this.setDisable(true);
-                }
-            }
-        });
         allKeuangan.addListener((ListChangeListener.Change<? extends Keuangan> change) -> {
             searchKeuangan();
         });
@@ -190,19 +153,25 @@ public class LaporanKeuanganController {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+        ObservableList<String> groupBy = FXCollections.observableArrayList();
+        groupBy.add("Tanggal");
+        groupBy.add("Sales");
+        groupBy.add("Kategori");
+        groupByCombo.setItems(groupBy);
+        groupByCombo.getSelectionModel().select("Tanggal");
         getKeuangan();
     }
 
     @FXML
     private void getKeuangan() {
-        try (Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             allKeuangan.clear();
             allKeuangan.addAll(KeuanganDAO.getAllByDate(con,
                     tglMulaiPicker.getValue().toString(),
                     tglAkhirPicker.getValue().toString()));
-            saldoAwalField.setText(rp.format(KeuanganDAO.getSaldoAwal(con, 
+            saldoAwalField.setText(rp.format(KeuanganDAO.getSaldoAwal(con,
                     tglMulaiPicker.getValue().toString())));
-            saldoAkhirField.setText(rp.format(KeuanganDAO.getSaldoAkhir(con, 
+            saldoAkhirField.setText(rp.format(KeuanganDAO.getSaldoAkhir(con,
                     tglAkhirPicker.getValue().toString())));
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
@@ -245,27 +214,61 @@ public class LaporanKeuanganController {
         if (keuanganTable.getRoot() != null) {
             keuanganTable.getRoot().getChildren().clear();
         }
-        List<String> kategori = new ArrayList<>();
+        List<String> groupBy = new ArrayList<>();
         for (Keuangan temp : filterData) {
-            if (!kategori.contains(temp.getKategori())) {
-                kategori.add(temp.getKategori());
+            if (groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")) {
+                if (!groupBy.contains(temp.getTglKeuangan().substring(0, 10))) {
+                    groupBy.add(temp.getTglKeuangan().substring(0, 10));
+                }
+            } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Sales")) {
+                if (!groupBy.contains(temp.getKodeUser())) {
+                    groupBy.add(temp.getKodeUser());
+                }
+            } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Kategori")) {
+                if (!groupBy.contains(temp.getKategori())) {
+                    groupBy.add(temp.getKategori());
+                }
             }
         }
-        for (String temp : kategori) {
+        for (String temp : groupBy) {
             Keuangan katKeu = new Keuangan();
             katKeu.setNoKeuangan(temp);
             TreeItem<Keuangan> parent = new TreeItem<>(katKeu);
             double total = 0;
-            for (Keuangan temp2 : filterData) {
-                if (temp.equals(temp2.getKategori())) {
-                    TreeItem<Keuangan> child = new TreeItem<>(temp2);
-                    total = total + temp2.getJumlahRp();
-                    parent.getChildren().addAll(child);
-                }
+            for (Keuangan detail : filterData) {
+                if (groupByCombo.getSelectionModel().getSelectedItem().equals("Tanggal")) {
+                    if (temp.equals(detail.getTglKeuangan().substring(0, 10))) {
+                        TreeItem<Keuangan> child = new TreeItem<>(detail);
+                        total = total + detail.getJumlahRp();
+                        parent.getChildren().addAll(child);
+                    }
+                } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Kategori")) {
+                    if (temp.equals(detail.getKategori())) {
+                        TreeItem<Keuangan> child = new TreeItem<>(detail);
+                        total = total + detail.getJumlahRp();
+                        parent.getChildren().addAll(child);
+                    }
+                } else if (groupByCombo.getSelectionModel().getSelectedItem().equals("Sales")) {
+                    if (temp.equals(detail.getKodeUser())) {
+                        TreeItem<Keuangan> child = new TreeItem<>(detail);
+                        total = total + detail.getJumlahRp();
+                        parent.getChildren().addAll(child);
+                    }
+                } 
             }
             parent.getValue().setJumlahRp(total);
             root.getChildren().add(parent);
         }
         keuanganTable.setRoot(root);
+    }
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanKeuangan(filterData, tglMulaiPicker.getValue().toString(),
+                    tglAkhirPicker.getValue().toString(), groupByCombo.getSelectionModel().getSelectedItem(), searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 }

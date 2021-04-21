@@ -1,4 +1,5 @@
 localhost
+baru
 EPSON LX-310
 POS-58
 GT-800

@@ -41,6 +41,7 @@
                   <TableColumn fx:id="kadarColumn" prefWidth="75.0" text="Kadar" />
                   <TableColumn fx:id="beratColumn" prefWidth="75.0" text="Berat" />
                   <TableColumn fx:id="beratAsliColumn" prefWidth="75.0" text="Berat Asli" />
+                  <TableColumn fx:id="beratKemasanColumn" prefWidth="75.0" text="Berat Kemasan" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -55,7 +56,7 @@
                   <Label fx:id="totalBerat" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
                   <Label prefHeight="25.0" text="Total Berat Asli" />
                   <Label fx:id="totalBeratAsli" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
-                  <Label prefHeight="25.0" text="Total Berat + Label" />
+                  <Label prefHeight="25.0" text="Total Berat ( Kemasan + Label )" />
                   <Label fx:id="totalBeratLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>

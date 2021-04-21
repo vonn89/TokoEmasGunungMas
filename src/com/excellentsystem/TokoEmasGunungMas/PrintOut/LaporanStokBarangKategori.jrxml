@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a2684c4c-28ad-473d-ba67-363a0791bd3b">
+	<property name="ireport.zoom" value="1.366026910730142"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#404040">
+		<box leftPadding="5" rightPadding="5">
+			<leftPen lineWidth="0.0"/>
+			<rightPen lineWidth="0.0"/>
+		</box>
+	</style>
+	<style name="groupHeader1" mode="Opaque" backcolor="#FFCBCB">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="groupHeader2" mode="Opaque" backcolor="#CBEDFF">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detail" mode="Opaque">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<style name="detailEven" mode="Opaque" backcolor="#EDEDED">
+		<box leftPadding="5" rightPadding="5"/>
+	</style>
+	<parameter name="kodeCabang" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tanggal" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="groupBy" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="search" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="beratAwal" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratAwal]]></fieldDescription>
+	</field>
+	<field name="stokAkhir" class="java.lang.Integer">
+		<fieldDescription><![CDATA[stokAkhir]]></fieldDescription>
+	</field>
+	<field name="beratKeluar" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratKeluar]]></fieldDescription>
+	</field>
+	<field name="kodeBarcode" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeBarcode]]></fieldDescription>
+	</field>
+	<field name="beratAkhir" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratAkhir]]></fieldDescription>
+	</field>
+	<field name="kodeKategori" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeKategori]]></fieldDescription>
+	</field>
+	<field name="stokAwal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[stokAwal]]></fieldDescription>
+	</field>
+	<field name="stokKeluar" class="java.lang.Integer">
+		<fieldDescription><![CDATA[stokKeluar]]></fieldDescription>
+	</field>
+	<field name="stokMasuk" class="java.lang.Integer">
+		<fieldDescription><![CDATA[stokMasuk]]></fieldDescription>
+	</field>
+	<field name="tanggal" class="java.lang.String">
+		<fieldDescription><![CDATA[tanggal]]></fieldDescription>
+	</field>
+	<field name="kodeJenis" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeJenis]]></fieldDescription>
+	</field>
+	<field name="kodeGudang" class="java.lang.String">
+		<fieldDescription><![CDATA[kodeGudang]]></fieldDescription>
+	</field>
+	<field name="beratMasuk" class="java.lang.Double">
+		<fieldDescription><![CDATA[beratMasuk]]></fieldDescription>
+	</field>
+	<variable name="stokAwalJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokAwal}]]></variableExpression>
+	</variable>
+	<variable name="beratAwalJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAwal}]]></variableExpression>
+	</variable>
+	<variable name="stokMasukJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokMasuk}]]></variableExpression>
+	</variable>
+	<variable name="beratMasukJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratMasuk}]]></variableExpression>
+	</variable>
+	<variable name="stokKeluarJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokKeluar}]]></variableExpression>
+	</variable>
+	<variable name="beratKeluarJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratKeluar}]]></variableExpression>
+	</variable>
+	<variable name="stokAkhirJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokAkhir}]]></variableExpression>
+	</variable>
+	<variable name="beratAkhirJenis" class="java.lang.Double" resetType="Group" resetGroup="jenis" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAkhir}]]></variableExpression>
+	</variable>
+	<variable name="stokAwalGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokAwal}]]></variableExpression>
+	</variable>
+	<variable name="beratAwalGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAwal}]]></variableExpression>
+	</variable>
+	<variable name="stokMasukGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokMasuk}]]></variableExpression>
+	</variable>
+	<variable name="beratMasukGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratMasuk}]]></variableExpression>
+	</variable>
+	<variable name="stokKeluarGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokKeluar}]]></variableExpression>
+	</variable>
+	<variable name="beratKeluarGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratKeluar}]]></variableExpression>
+	</variable>
+	<variable name="stokAkhirGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokAkhir}]]></variableExpression>
+	</variable>
+	<variable name="beratAkhirGroup" class="java.lang.Double" resetType="Group" resetGroup="Kategori" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAkhir}]]></variableExpression>
+	</variable>
+	<variable name="stokAwalGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokAwal}]]></variableExpression>
+	</variable>
+	<variable name="beratAwalGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAwal}]]></variableExpression>
+	</variable>
+	<variable name="stokMasukGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokMasuk}]]></variableExpression>
+	</variable>
+	<variable name="beratMasukGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratMasuk}]]></variableExpression>
+	</variable>
+	<variable name="stokKeluarGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokKeluar}]]></variableExpression>
+	</variable>
+	<variable name="beratKeluarGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratKeluar}]]></variableExpression>
+	</variable>
+	<variable name="stokAkhirGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{stokAkhir}]]></variableExpression>
+	</variable>
+	<variable name="beratAkhirGroup_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{beratAkhir}]]></variableExpression>
+	</variable>
+	<variable name="variable1" class="java.lang.Integer" incrementType="Group" incrementGroup="jenis" calculation="Count">
+		<variableExpression><![CDATA[$V{jenis_COUNT}]]></variableExpression>
+	</variable>
+	<group name="Kategori">
+		<groupExpression><![CDATA[$F{kodeKategori}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement style="groupHeader2" x="0" y="0" width="555" height="20" uuid="22c118e4-83db-42ee-9111-a7fb592849ee"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{kodeKategori}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="27">
+				<textField>
+					<reportElement style="groupHeader2" x="0" y="0" width="75" height="20" uuid="a13d068f-ef6c-47a1-b887-48e5152ab612"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{kodeKategori}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="195" y="0" width="60" height="20" uuid="b6919c7b-8695-4520-ab07-255262308866"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokMasukGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="135" y="0" width="60" height="20" uuid="4c5273b9-c5da-466f-a655-8fc064112da2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratAwalGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="75" y="0" width="60" height="20" uuid="20a3dc32-4bf9-4703-8b08-42317d0fa09d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokAwalGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="315" y="0" width="60" height="20" uuid="ec2fda4e-2023-4ca9-8efe-9bfa3632a5d2"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokKeluarGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="375" y="0" width="60" height="20" uuid="2024b8cb-011f-48d8-8653-c95f90c19226"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratKeluarGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="255" y="0" width="60" height="20" uuid="ff3b283a-9e90-46ee-b2a7-8ab3acc60b49"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratMasukGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="435" y="0" width="60" height="20" uuid="ac93e44f-864c-4585-8fd8-bb925f22497c"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokAkhirGroup}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="groupHeader2" x="495" y="0" width="60" height="20" uuid="0dc13825-eaa0-44d1-9b87-8d2128eedd89"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratAkhirGroup}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="jenis">
+		<groupExpression><![CDATA[$F{kodeJenis}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<printWhenExpression><![CDATA[$V{variable1}%2!=0]]></printWhenExpression>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="135" y="0" width="60" height="20" uuid="fcde233b-2a81-4527-8c8d-0cd52fcd4804"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratAwalJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="75" y="0" width="60" height="20" uuid="d6b20e13-a150-4bb1-be7d-c9dcaa35b87d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokAwalJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="195" y="0" width="60" height="20" uuid="d9268b6a-fbd4-43a5-8fc9-77180149cec3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokMasukJenis}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detail" x="0" y="0" width="75" height="20" uuid="64d924da-8b3b-42d6-8f8c-f430f779ec18"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{kodeJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="255" y="0" width="60" height="20" uuid="9479133f-5043-4af4-a594-ce52d1adf51b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratMasukJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="315" y="0" width="60" height="20" uuid="4f2f8ce6-cda1-4251-8283-6da46c3282be"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokKeluarJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="375" y="0" width="60" height="20" uuid="04f85ade-681a-4ec0-9b79-5e06b0f121bc"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratKeluarJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="435" y="0" width="60" height="20" uuid="cc22b5ea-ae34-4f84-bba0-4910d46588ed"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokAkhirJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detail" x="495" y="0" width="60" height="20" uuid="5fbb93fe-457b-4b17-a220-0d707bcdad6d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratAkhirJenis}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<printWhenExpression><![CDATA[$V{variable1}%2==0]]></printWhenExpression>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="75" y="0" width="60" height="20" uuid="8f4200d2-2550-4822-961e-88248596d79d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokAwalJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="255" y="0" width="60" height="20" uuid="f095d511-be83-4b5b-b279-f7adb15287fb"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratMasukJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="495" y="0" width="60" height="20" uuid="c695b53a-fa03-4f16-b4e9-34f081e15373"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratAkhirJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="315" y="0" width="60" height="20" uuid="6f862f29-d839-46f6-9c1c-86245dec2a2e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokKeluarJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="435" y="0" width="60" height="20" uuid="319c8158-2638-4355-9464-347227ac9bdc"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokAkhirJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="135" y="0" width="60" height="20" uuid="467a0e64-cdcf-4f67-872b-aae1f720f343"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratAwalJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="375" y="0" width="60" height="20" uuid="f888e787-d839-4873-bd86-aca8ca6c38b3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{beratKeluarJenis}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.##">
+					<reportElement style="detailEven" x="195" y="0" width="60" height="20" uuid="9516a8c8-b00b-488d-96e1-4ae93a5f6b2d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{stokMasukJenis}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="detailEven" x="0" y="0" width="75" height="20" uuid="1e9cf70d-d86a-49b2-9eaf-6b908d9974a2"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Serif" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{kodeJenis}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="31" uuid="f6fbb57c-71bc-4181-a475-e59ee871203c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" size="22"/>
+				</textElement>
+				<text><![CDATA[Laporan Stok Barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="31" width="70" height="15" uuid="617479ab-decc-4e9e-a843-37107397ae82"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Kode Cabang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="31" width="10" height="15" uuid="da0eb761-c43a-4c35-b379-22e3f6cd4fa0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="31" width="475" height="15" uuid="65b1e33c-1656-4c81-96db-b852622de606"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{kodeCabang}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="408" y="55" width="147" height="20" uuid="eedcf211-83d5-4139-ba7c-5f7cbf55558a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" size="14"/>
+				</textElement>
+				<text><![CDATA[Toko Emas Gunung Mas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="70" height="15" uuid="f430ce9e-760a-41c5-92f2-a2690035fb13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Filter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="60" width="10" height="15" uuid="3e7821cc-6735-4dcc-b6a5-a6ddedf1c0e7"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="60" width="475" height="15" uuid="7d605668-eca2-4b4c-9541-fe43756b5544"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{search}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="46" width="70" height="15" uuid="97bd1567-0d1c-4558-a0f9-78b5c2028f8a"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Group By]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="46" width="475" height="15" uuid="0e4b7009-3c83-4038-b2c8-ee1d99509460"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{groupBy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="70" y="46" width="10" height="15" uuid="80f3248c-8cd5-4c06-a84d-0da22b1cc227"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement style="columnHeader" x="75" y="0" width="60" height="30" uuid="2b38d70a-d4cf-419b-a062-6ba0854a7f1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Stok Awal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="75" height="30" uuid="d9434324-80b1-42b9-a6e4-de8d1335a194"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Kode Jenis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="135" y="0" width="60" height="30" uuid="6a9e8871-913d-451e-9f96-b3a513feb355"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Berat Awal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="195" y="0" width="60" height="30" uuid="e51c05ae-2bee-4ed1-b2a8-56c61df74d9a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Stok Masuk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="255" y="0" width="60" height="30" uuid="713f1f51-bcfd-4529-85fc-76fa6948520b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Berat Masuk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="315" y="0" width="60" height="30" uuid="f859ae58-0894-4c1e-afb4-fc6e62986e3c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Stok Keluar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="375" y="0" width="60" height="30" uuid="f7fcbfec-6fc6-4f79-9608-873a84b284b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Berat Keluar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="435" y="0" width="60" height="30" uuid="99f2f140-51ca-43a8-b589-80cb3c2d4a01"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Stok Akhir]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="columnHeader" x="495" y="0" width="60" height="30" uuid="05a60d68-df07-4888-8a58-67f90124a723"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif"/>
+				</textElement>
+				<text><![CDATA[Berat Akhir]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="36" y="0" width="34" height="20" uuid="7e0c9a31-78cf-4077-ab36-bda4c7b4414e"/>
+				<textElement>
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="335" y="0" width="100" height="20" uuid="6acdfb9e-8a35-433c-8fc2-38721317171f"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Print Date :  ]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy HH:mm">
+				<reportElement x="435" y="0" width="119" height="20" uuid="3671378e-b103-4e42-a52f-b778fe985313"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="36" height="20" uuid="baa60a09-a930-4e33-a02b-f31b13e34bc0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="20">
+			<staticText>
+				<reportElement style="columnHeader" x="0" y="0" width="75" height="20" uuid="6768c51a-0eca-48da-87a6-6cd8b002280c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grandtotal]]></text>
+			</staticText>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="195" y="0" width="60" height="20" uuid="ea0cca80-193c-4299-a4ff-a8467291e0ac"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{stokMasukGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="135" y="0" width="60" height="20" uuid="41e91814-3e14-4c66-a58f-900e1967b024"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{beratAwalGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="75" y="0" width="60" height="20" uuid="351ceccc-35a0-4e98-9437-ced86bdb346d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{stokAwalGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="255" y="0" width="60" height="20" uuid="ae6dca1e-8be7-4c2e-bcc4-f30cf4fe2d6c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{beratMasukGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="315" y="0" width="60" height="20" uuid="77fd1078-a0d3-4ce8-8d86-e6ab4ae16beb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{stokKeluarGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="375" y="0" width="60" height="20" uuid="cafb30e1-4f43-4d16-aab2-7d0c07f62656"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{beratKeluarGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="495" y="0" width="60" height="20" uuid="d2bb2e89-57af-4f5c-ab80-0874d46bf51b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{beratAkhirGroup_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement style="columnHeader" x="435" y="0" width="60" height="20" uuid="7f8ce434-b0c1-4f6a-aff6-60fc22405d65"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{stokAkhirGroup_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

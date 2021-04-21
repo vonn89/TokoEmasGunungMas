@@ -11,9 +11,15 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.rp;
 import com.excellentsystem.TokoEmasGunungMas.Model.User;
 import com.excellentsystem.TokoEmasGunungMas.Model.Verifikasi;
 import java.text.Annotation;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeTableCell;
@@ -53,6 +59,15 @@ public class Function {
 //            }
 //        });
 //    }
+    public static Comparator<String> sortDate(DateFormat df){
+        return (String t, String t1) -> {
+            try{
+                return Long.compare(df.parse(t).getTime(),df.parse(t1).getTime());
+            }catch(ParseException e){
+                return -1;
+            }
+        };
+    }
     public static TableCell getTableCell(DecimalFormat df){ 
         TableCell cell = new TableCell<Annotation, Number>(){
             @Override
@@ -78,6 +93,62 @@ public class Function {
             }
         };
         return cell;
+    }
+    public static DateCell getDateCellDisableBefore(LocalDate date){
+        return new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                DayOfWeek day = DayOfWeek.from(item);
+                if (day == DayOfWeek.SUNDAY) 
+                    this.setStyle("-fx-background-color: derive(RED, 150%);");
+                if (item.isBefore(date)) 
+                    this.setDisable(true);
+            }
+        };
+    }
+    public static DateCell getDateCellDisableAfter(LocalDate date){
+        return new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                DayOfWeek day = DayOfWeek.from(item);
+                if (day == DayOfWeek.SUNDAY) 
+                    this.setStyle("-fx-background-color: derive(RED, 150%);");
+                if (item.isAfter(date)) 
+                    this.setDisable(true);
+            }
+        };
+    }
+    public static DateCell getDateCellMulai(DatePicker tglAkhir){
+        return new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                DayOfWeek day = DayOfWeek.from(item);
+                if (day == DayOfWeek.SUNDAY) 
+                    this.setStyle("-fx-background-color: derive(RED, 150%);");
+                if(item.isAfter(LocalDate.now()))
+                    this.setDisable(true);
+                if(item.isAfter(tglAkhir.getValue()))
+                    this.setDisable(true);
+            }
+        };
+    }
+    public static DateCell getDateCellAkhir(DatePicker tglMulai){
+        return new DateCell() {
+            @Override
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                DayOfWeek day = DayOfWeek.from(item);
+                if (day == DayOfWeek.SUNDAY) 
+                    this.setStyle("-fx-background-color: derive(RED, 150%);");
+                if(item.isAfter(LocalDate.now()))
+                    this.setDisable(true);
+                if(item.isBefore(tglMulai.getValue()))
+                    this.setDisable(true);
+            }
+        };
     }
     public static void setBeratField(TextField field){
         field.setOnKeyReleased((event) -> {

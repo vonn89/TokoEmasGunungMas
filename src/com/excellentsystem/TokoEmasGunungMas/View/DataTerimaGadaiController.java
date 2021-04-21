@@ -14,10 +14,8 @@ import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
 import static com.excellentsystem.TokoEmasGunungMas.Main.rp;
 import static com.excellentsystem.TokoEmasGunungMas.Main.sistem;
-import static com.excellentsystem.TokoEmasGunungMas.Main.tglBarang;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
-import static com.excellentsystem.TokoEmasGunungMas.Main.tglSystem;
 import com.excellentsystem.TokoEmasGunungMas.Model.GadaiDetail;
 import com.excellentsystem.TokoEmasGunungMas.Model.GadaiHead;
 import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
@@ -349,7 +347,7 @@ public class DataTerimaGadaiController {
 
     private void deleteGadai(GadaiHead p) {
         try {
-            if (!p.getNoGadai().substring(3, 9).equals(tglSystem.format(tglBarang.parse(sistem.getTglSystem())))) {
+            if (!p.getTglGadai().substring(0,10).equals(sistem.getTglSystem())) {
                 mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat dibatal, gadai sudah berbeda tanggal");
             } else if(p.getStatus().equals("Lunas")){
                 mainApp.showMessage(Modality.NONE, "Warning", "Tidak dapat dibatal, Gadai sudah lunas");

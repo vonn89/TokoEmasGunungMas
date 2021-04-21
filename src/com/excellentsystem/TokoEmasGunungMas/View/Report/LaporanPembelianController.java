@@ -7,6 +7,8 @@ package com.excellentsystem.TokoEmasGunungMas.View.Report;
 
 import com.excellentsystem.TokoEmasGunungMas.DAO.PembelianDetailDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.PembelianHeadDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTreeTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
@@ -15,10 +17,9 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
 import com.excellentsystem.TokoEmasGunungMas.Model.PembelianDetail;
 import com.excellentsystem.TokoEmasGunungMas.Model.PembelianHead;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import java.sql.Connection;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -26,19 +27,19 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -107,6 +108,7 @@ public class LaporanPembelianController {
 
     public void initialize() {
         noPembelianColumn.setCellValueFactory(param -> param.getValue().getValue().noPembelianProperty());
+        
         tglPembelianColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(
@@ -116,192 +118,90 @@ public class LaporanPembelianController {
                 return null;
             }
         });
+        tglPembelianColumn.setComparator(Function.sortDate(tglLengkap));
+        
         kodeSalesColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().kodeSalesProperty());
+        
         kodePelangganColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().kodePelangganProperty());
+        
         namaColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().namaProperty());
+        
         alamatColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().alamatProperty());
+        
         noTelpColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().noTelpProperty());
+        
         totalBeratKotorColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().totalberatKotorProperty());
-        totalBeratKotorColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        totalBeratKotorColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         totalBeratBersihColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().totalBeratBersihProperty());
-        totalBeratBersihColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        totalBeratBersihColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         totalPembelianColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().totalPembelianProperty());
-        totalPembelianColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
+        totalPembelianColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         catatanColumn.setCellValueFactory(param -> param.getValue().getValue().getPembelian().catatanProperty());
 
         namaBarangColumn.setCellValueFactory(param -> param.getValue().getValue().namaBarangProperty());
+        
         kodeKategoriColumn.setCellValueFactory(param -> param.getValue().getValue().kodeKategoriProperty());
+        
         kodeJenisColumn.setCellValueFactory(param -> param.getValue().getValue().kodeJenisProperty());
+        
         beratKotorColumn.setCellValueFactory(param -> param.getValue().getValue().beratKotorProperty());
-        beratKotorColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        beratKotorColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         beratBersihColumn.setCellValueFactory(param -> param.getValue().getValue().beratBersihProperty());
-        beratBersihColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        beratBersihColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         hargaKompColumn.setCellValueFactory(param -> param.getValue().getValue().hargaKompProperty());
-        hargaKompColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
+        hargaKompColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         hargaBeliColumn.setCellValueFactory(param -> param.getValue().getValue().hargaBeliProperty());
-        hargaBeliColumn.setCellFactory(col -> new TreeTableCell<PembelianDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
+        hargaBeliColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
+        mulaiTglPicker.setConverter(Function.getTglConverter());
+        mulaiTglPicker.setValue(LocalDate.now());
+        mulaiTglPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(akhirTglPicker));
+        akhirTglPicker.setConverter(Function.getTglConverter());
+        akhirTglPicker.setValue(LocalDate.now());
+        akhirTglPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(mulaiTglPicker));
+        
+        final ContextMenu rowMenu = new ContextMenu();
+        MenuItem cetak = new MenuItem("Print Laporan");
+        cetak.setOnAction((ActionEvent e) -> {
+            printLaporan();
         });
-        mulaiTglPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            getPembelian();
         });
-        mulaiTglPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        mulaiTglPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isAfter(akhirTglPicker.getValue())) {
-                            this.setDisable(true);
-                        }
+        rowMenu.getItems().addAll(cetak, refresh);
+        pembelianTable.setContextMenu(rowMenu);
+        pembelianTable.setRowFactory(table -> {
+            TreeTableRow<PembelianDetail> row = new TreeTableRow<PembelianDetail>() {
+                @Override
+                public void updateItem(PembelianDetail item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(rowMenu);
+                    } else {
+                        final ContextMenu rowMenu = new ContextMenu();
+                        MenuItem cetak = new MenuItem("Print Laporan");
+                        cetak.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
+                        MenuItem refresh = new MenuItem("Refresh");
+                        refresh.setOnAction((ActionEvent event) -> {
+                            getPembelian();
+                        });
+                        rowMenu.getItems().addAll(cetak, refresh);
+                        setContextMenu(rowMenu);
                     }
-                };
-            }
-        });
-        akhirTglPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
                 }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+            };
+            return row;
         });
-        akhirTglPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        akhirTglPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isBefore(mulaiTglPicker.getValue())) {
-                            this.setDisable(true);
-                        }
-                    }
-                };
-            }
-        });
+        
         allPembelian.addListener((ListChangeListener.Change<? extends PembelianDetail> change) -> {
             searchPembelianDetail();
         });
@@ -505,6 +405,16 @@ public class LaporanPembelianController {
         totalBeratBersihField.setText(gr.format(totalBeratBersih));
         totalBeratKotorField.setText(gr.format(totalBeratKotor));
         totalPembelianField.setText(rp.format(totalBeli));
+    }
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanPembelian(filterData, mulaiTglPicker.getValue().toString(),
+                    akhirTglPicker.getValue().toString(), groupByCombo.getSelectionModel().getSelectedItem(), searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 
 }

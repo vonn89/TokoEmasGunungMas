@@ -96,6 +96,8 @@ public class DataBarangBarcodeController {
     @FXML
     private TableColumn<Barang, Number> beratAsliColumn;
     @FXML
+    private TableColumn<Barang, Number> beratKemasanColumn;
+    @FXML
     private TableColumn<Barang, Number> nilaiPokokColumn;
     @FXML
     private TableColumn<Barang, Number> hargaJualColumn;
@@ -159,6 +161,8 @@ public class DataBarangBarcodeController {
         beratColumn.setCellFactory(col -> getTableCell(gr));
         beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().beratAsliProperty());
         beratAsliColumn.setCellFactory(col -> getTableCell(gr));
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> getTableCell(gr));
         nilaiPokokColumn.setCellValueFactory(cellData -> cellData.getValue().nilaiPokokProperty());
         nilaiPokokColumn.setCellFactory(col -> getTableCell(rp));
         hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().hargaJualProperty());
@@ -209,11 +213,15 @@ public class DataBarangBarcodeController {
         hancur.setOnAction((ActionEvent event) -> {
             hancurBarang();
         });
+        MenuItem laporan = new MenuItem("Print Laporan");
+        laporan.setOnAction((ActionEvent e) -> {
+            printLaporan();
+        });
         MenuItem refresh = new MenuItem("Refresh");
         refresh.setOnAction((ActionEvent event) -> {
             getBarang();
         });
-        rowMenu.getItems().addAll(cetak, pindah, hancur, refresh);
+        rowMenu.getItems().addAll(cetak, pindah, hancur, laporan, refresh);
         barangTable.setContextMenu(rowMenu);
         barangTable.setRowFactory(table -> {
             TableRow<Barang> row = new TableRow<Barang>() {
@@ -240,11 +248,15 @@ public class DataBarangBarcodeController {
                         hancur.setOnAction((ActionEvent event) -> {
                             hancurBarang();
                         });
+                        MenuItem laporan = new MenuItem("Print Laporan");
+                        laporan.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
                         MenuItem refresh = new MenuItem("Refresh");
                         refresh.setOnAction((ActionEvent e) -> {
                             getBarang();
                         });
-                        rowMenu.getItems().addAll(edit, cetak, pindah, hancur, refresh);
+                        rowMenu.getItems().addAll(edit, cetak, pindah, hancur, laporan, refresh);
                         setContextMenu(rowMenu);
                     }
                 }
@@ -372,6 +384,7 @@ public class DataBarangBarcodeController {
                             || checkColumn(temp.getSoldBy())
                             || checkColumn(gr.format(temp.getBerat()))
                             || checkColumn(gr.format(temp.getBeratAsli()))
+                            || checkColumn(gr.format(temp.getBeratKemasan()))
                             || checkColumn(gr.format(temp.getNilaiPokok()))
                             || checkColumn(gr.format(temp.getHargaJual()))) {
                         filterData.add(temp);
@@ -393,6 +406,7 @@ public class DataBarangBarcodeController {
         int totalQty = 0;
         double totalBerat = 0;
         double totalBeratAsli = 0;
+        double totalBeratAll = 0;
         double totalNilai = 0;
         double totalHarga = 0;
         for (Barang b : filterData) {
@@ -400,6 +414,7 @@ public class DataBarangBarcodeController {
                 totalQty = totalQty + 1;
                 totalBerat = totalBerat + b.getBerat();
                 totalBeratAsli = totalBeratAsli + b.getBeratAsli();
+                totalBeratAll = totalBeratAll + b.getBeratAsli() + b.getBeratKemasan();
                 totalNilai = totalNilai + b.getNilaiPokok();
                 totalHarga = totalHarga + b.getHargaJual();
             }
@@ -407,7 +422,7 @@ public class DataBarangBarcodeController {
         totalQtyLabel.setText(gr.format(totalQty));
         totalBeratLabel.setText(gr.format(totalBerat));
         totalBeratAsliLabel.setText(gr.format(totalBeratAsli));
-        totalBeratLabelLabel.setText(gr.format(totalBeratAsli + (totalQty * Main.sistem.getBeratLabel())));
+        totalBeratLabelLabel.setText(gr.format(totalBeratAll + (totalQty * Main.sistem.getBeratLabel())));
         totalNilaiPokokLabel.setText(rp.format(totalNilai));
         totalHargaJualLabel.setText(rp.format(totalHarga));
     }
@@ -492,6 +507,7 @@ public class DataBarangBarcodeController {
                             b.setKeterangan(controller.keteranganField.getText());
                             b.setKodeIntern(controller.kodeInternField.getText());
                             b.setKadar(controller.kadarField.getText());
+                            b.setBeratKemasan(Double.parseDouble(controller.beratKemasanField.getText().replaceAll(",", "")));
                             b.setNilaiPokok(Double.parseDouble(controller.nilaiPokokField.getText().replaceAll(",", "")));
                             b.setHargaJual(Double.parseDouble(controller.hargaJualField.getText().replaceAll(",", "")));
                             BarangDAO.update(con, b);
@@ -620,6 +636,16 @@ public class DataBarangBarcodeController {
                     mainApp.showMessage(Modality.NONE, "Error", e.toString());
                 }
             });
+        }
+    }
+
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanBarang(filterData, searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
 }

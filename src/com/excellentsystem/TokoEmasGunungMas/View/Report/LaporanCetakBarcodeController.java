@@ -8,6 +8,8 @@ package com.excellentsystem.TokoEmasGunungMas.View.Report;
 import com.excellentsystem.TokoEmasGunungMas.DAO.BarangDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.CetakBarcodeDetailDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.CetakBarcodeHeadDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTreeTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
@@ -17,11 +19,9 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
 import com.excellentsystem.TokoEmasGunungMas.Model.Barang;
 import com.excellentsystem.TokoEmasGunungMas.Model.CetakBarcodeDetail;
 import com.excellentsystem.TokoEmasGunungMas.Model.CetakBarcodeHead;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import java.sql.Connection;
-import java.text.ParseException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,17 +29,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -49,52 +50,35 @@ import javafx.util.StringConverter;
 public class LaporanCetakBarcodeController {
 
     @FXML
-    private TableView<CetakBarcodeHead> cetakBarcodeHeadTable;
+    private TreeTableView<CetakBarcodeDetail> cetakBarcodeHeadTable;
     @FXML
-    private TableColumn<CetakBarcodeHead, String> noCetakColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> noCetakColumn;
     @FXML
-    private TableColumn<CetakBarcodeHead, String> tglCetakColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> tglCetakColumn;
     @FXML
-    private TableColumn<CetakBarcodeHead, Number> totalQtyColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> kodeUserColumn;
     @FXML
-    private TableColumn<CetakBarcodeHead, Number> totalBeratColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> kodeBarcodeColumn;
     @FXML
-    private TableColumn<CetakBarcodeHead, Number> totalBeratAsliColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> namaBarangColumn;
     @FXML
-    private TableColumn<CetakBarcodeHead, String> kodeUserColumn;
-
+    private TreeTableColumn<CetakBarcodeDetail, String> keteranganColumn;
     @FXML
-    private TableView<CetakBarcodeDetail> cetakBarcodeDetailTable;
+    private TreeTableColumn<CetakBarcodeDetail, String> kodeKategoriColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> kodeBarcodeColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> kodeJenisColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> namaBarangColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> kodeGudangColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> keteranganColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> kodeInternColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> kodeKategoriColumn;
+    private TreeTableColumn<CetakBarcodeDetail, String> kadarColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> kodeJenisColumn;
+    private TreeTableColumn<CetakBarcodeDetail, Number> beratColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> kodeGudangColumn;
+    private TreeTableColumn<CetakBarcodeDetail, Number> beratAsliColumn;
     @FXML
-    private TableColumn<CetakBarcodeDetail, String> kodeInternColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, String> kadarColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, Number> beratColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, Number> beratAsliColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, Number> nilaiPokokColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, Number> hargaJualColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, String> userBarcodeColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, String> tglBarcodeColumn;
-    @FXML
-    private TableColumn<CetakBarcodeDetail, String> statusBarangColumn;
+    private TreeTableColumn<CetakBarcodeDetail, Number> beratKemasanColumn;
 
     @FXML
     private Label totalQty;
@@ -109,256 +93,125 @@ public class LaporanCetakBarcodeController {
     @FXML
     private TextField searchField;
     private Main mainApp;
-    private ObservableList<CetakBarcodeHead> allCetakBarcode = FXCollections.observableArrayList();
-    private ObservableList<CetakBarcodeHead> filterData = FXCollections.observableArrayList();
+    final TreeItem<CetakBarcodeDetail> root = new TreeItem<>();
+    private ObservableList<CetakBarcodeDetail> filterData = FXCollections.observableArrayList();
     private ObservableList<CetakBarcodeDetail> allDetail = FXCollections.observableArrayList();
 
     public void initialize() {
-        noCetakColumn.setCellValueFactory(cellData -> cellData.getValue().noCetakProperty());
+        noCetakColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().noCetakProperty());
+
         tglCetakColumn.setCellValueFactory(cellData -> {
             try {
-                return new SimpleStringProperty(tglLengkap.format(
-                        tglSql.parse(cellData.getValue().getTglCetak())));
-            } catch (ParseException ex) {
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getCetakBarcodeHead().getTglCetak())));
+            } catch (Exception ex) {
                 return null;
             }
         });
-        totalQtyColumn.setCellValueFactory(cellData -> cellData.getValue().totalQtyProperty());
-        totalQtyColumn.setCellFactory(col -> new TableCell<CetakBarcodeHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        totalBeratColumn.setCellValueFactory(cellData -> cellData.getValue().totalBeratProperty());
-        totalBeratColumn.setCellFactory(col -> new TableCell<CetakBarcodeHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        totalBeratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().totalBeratAsliProperty());
-        totalBeratAsliColumn.setCellFactory(col -> new TableCell<CetakBarcodeHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
+        tglCetakColumn.setComparator(Function.sortDate(tglLengkap));
 
-        kodeBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarcodeProperty());
-        tglBarcodeColumn.setCellValueFactory(cellData -> {
-            try {
-                return new SimpleStringProperty(tglLengkap.format(
-                        tglSql.parse(cellData.getValue().getBarang().getBarcodeDate())));
-            } catch (ParseException ex) {
-                return null;
-            }
-        });
-        namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().namaBarangProperty());
-        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().keteranganProperty());
-        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeKategoriProperty());
-        kodeJenisColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeJenisProperty());
-        kodeGudangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeGudangProperty());
-        kodeInternColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeInternProperty());
-        kadarColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kadarProperty());
-        beratColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().beratProperty());
-        beratColumn.setCellFactory(col -> new TableCell<CetakBarcodeDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().beratAsliProperty());
-        beratAsliColumn.setCellFactory(col -> new TableCell<CetakBarcodeDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        nilaiPokokColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().nilaiPokokProperty());
-        nilaiPokokColumn.setCellFactory(col -> new TableCell<CetakBarcodeDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
-        hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().hargaJualProperty());
-        hargaJualColumn.setCellFactory(col -> new TableCell<CetakBarcodeDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
-        statusBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().statusBarangProperty());
-        userBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().barcodeByProperty());
+        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getCetakBarcodeHead().kodeUserProperty());
 
-        tglStartPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        kodeBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kodeBarcodeProperty());
 
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
+        namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().namaBarangProperty());
 
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().keteranganProperty());
+
+        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeKategoriProperty());
+
+        kodeJenisColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeJenisProperty());
+
+        kodeGudangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeGudangProperty());
+
+        kodeInternColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeInternProperty());
+
+        kadarColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kadarProperty());
+
+        beratColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().beratProperty());
+        beratColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().beratAsliProperty());
+        beratAsliColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        tglStartPicker.setConverter(Function.getTglConverter());
+        tglStartPicker.setValue(LocalDate.now());
+        tglStartPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
+        tglAkhirPicker.setConverter(Function.getTglConverter());
+        tglAkhirPicker.setValue(LocalDate.now());
+        tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglStartPicker));
+
+        final ContextMenu rowMenu = new ContextMenu();
+        MenuItem cetak = new MenuItem("Print Laporan");
+        cetak.setOnAction((ActionEvent e) -> {
+            printLaporan();
         });
-        tglStartPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglStartPicker.setDayCellFactory((final DatePicker datePicker) -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                DayOfWeek day = DayOfWeek.from(item);
-                if (day == DayOfWeek.SUNDAY) {
-                    this.setStyle("-fx-background-color: derive(RED, 150%);");
-                }
-                if (item.equals(LocalDate.now())) {
-                    this.setStyle(" -fx-font-weight:bold;");
-                }
-                if (item.isAfter(LocalDate.now())) {
-                    this.setDisable(true);
-                }
-                if (item.isAfter(tglAkhirPicker.getValue())) {
-                    this.setDisable(true);
-                }
-            }
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            getCetakBarcode();
         });
-        tglAkhirPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-        tglAkhirPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglAkhirPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isBefore(tglStartPicker.getValue())) {
-                            this.setDisable(true);
-                        }
+        rowMenu.getItems().addAll(cetak, refresh);
+        cetakBarcodeHeadTable.setContextMenu(rowMenu);
+        cetakBarcodeHeadTable.setRowFactory(table -> {
+            TreeTableRow<CetakBarcodeDetail> row = new TreeTableRow<CetakBarcodeDetail>() {
+                @Override
+                public void updateItem(CetakBarcodeDetail item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(rowMenu);
+                    } else {
+                        final ContextMenu rowMenu = new ContextMenu();
+                        MenuItem cetak = new MenuItem("Print Laporan");
+                        cetak.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
+                        MenuItem refresh = new MenuItem("Refresh");
+                        refresh.setOnAction((ActionEvent event) -> {
+                            getCetakBarcode();
+                        });
+                        rowMenu.getItems().addAll(cetak, refresh);
+                        setContextMenu(rowMenu);
                     }
-                };
-            }
+                }
+            };
+            return row;
         });
-        cetakBarcodeHeadTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> selectCetakBarcode(newValue));
 
-        allCetakBarcode.addListener((ListChangeListener.Change<? extends CetakBarcodeHead> change) -> {
+        allDetail.addListener((ListChangeListener.Change<? extends CetakBarcodeDetail> change) -> {
             searchCetakBarcode();
         });
         searchField.textProperty().addListener(
                 (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
                     searchCetakBarcode();
                 });
-        filterData.addAll(allCetakBarcode);
+        filterData.addAll(allDetail);
     }
 
     public void setMainApp(Main mainApp) {
-        try {
-            this.mainApp = mainApp;
-            cetakBarcodeHeadTable.setItems(filterData);
-            cetakBarcodeDetailTable.setItems(allDetail);
-            getCetakBarcode();
-        } catch (Exception e) {
-            mainApp.showMessage(Modality.NONE, "Error", e.toString());
-        }
+        this.mainApp = mainApp;
+        getCetakBarcode();
     }
 
     @FXML
     private void getCetakBarcode() {
-        try (Connection con = Koneksi.getConnection()){
-            allCetakBarcode.clear();
-            List<CetakBarcodeHead> listCetakBarcodeHead = CetakBarcodeHeadDAO.getAllByTglCetak(con, 
-                    tglStartPicker.getValue().toString(), tglAkhirPicker.getValue().toString() );
-            List<CetakBarcodeDetail> listCetakBarcodeDetail = CetakBarcodeDetailDAO.getAllByTglCetak(con, 
+        try (Connection con = Koneksi.getConnection()) {
+            allDetail.clear();
+            List<CetakBarcodeHead> listCetakBarcodeHead = CetakBarcodeHeadDAO.getAllByTglCetak(con,
                     tglStartPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
-            for (CetakBarcodeHead h : listCetakBarcodeHead) {
-                List<CetakBarcodeDetail> cetakDetail = new ArrayList<>();
-                for (CetakBarcodeDetail d : listCetakBarcodeDetail) {
-                    if (h.getNoCetak().equals(d.getNoCetak())) {
-                        cetakDetail.add(d);
-                        Barang b = BarangDAO.get(con, d.getKodeBarcode());
-                        d.setBarang(b);
+            List<CetakBarcodeDetail> listCetakBarcodeDetail = CetakBarcodeDetailDAO.getAllByTglCetak(con,
+                    tglStartPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
+            for (CetakBarcodeDetail d : listCetakBarcodeDetail) {
+                for (CetakBarcodeHead h : listCetakBarcodeHead) {
+                    if (d.getNoCetak().equals(h.getNoCetak())) {
+                        d.setCetakBarcodeHead(h);
                     }
                 }
-                h.setAllDetail(cetakDetail);
+                Barang b = BarangDAO.get(con, d.getKodeBarcode());
+                d.setBarang(b);
             }
-            allCetakBarcode.addAll(listCetakBarcodeHead);
+            allDetail.addAll(listCetakBarcodeDetail);
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
@@ -376,74 +229,99 @@ public class LaporanCetakBarcodeController {
     private void searchCetakBarcode() {
         try {
             filterData.clear();
-            for (CetakBarcodeHead temp : allCetakBarcode) {
+            for (CetakBarcodeDetail temp : allDetail) {
                 if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
                 } else {
                     if (checkColumn(temp.getNoCetak())
-                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglCetak())))
-                            || checkColumn(gr.format(temp.getTotalQty()))
-                            || checkColumn(gr.format(temp.getTotalBerat()))
-                            || checkColumn(gr.format(temp.getTotalBeratAsli()))
-                            || checkColumn(temp.getKodeUser())) {
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getCetakBarcodeHead().getTglCetak())))
+                            || checkColumn(temp.getCetakBarcodeHead().getKodeUser())
+                            || checkColumn(temp.getKodeBarcode())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getBarang().getBarcodeDate())))
+                            || checkColumn(temp.getBarang().getNamaBarang())
+                            || checkColumn(temp.getBarang().getKeterangan())
+                            || checkColumn(temp.getBarang().getKodeKategori())
+                            || checkColumn(temp.getBarang().getKodeJenis())
+                            || checkColumn(temp.getBarang().getKodeGudang())
+                            || checkColumn(temp.getBarang().getKodeIntern())
+                            || checkColumn(temp.getBarang().getKadar())
+                            || checkColumn(temp.getBarang().getStatusBarang())
+                            || checkColumn(gr.format(temp.getBarang().getBerat()))
+                            || checkColumn(gr.format(temp.getBarang().getBeratAsli()))
+                            || checkColumn(rp.format(temp.getBarang().getNilaiPokok()))
+                            || checkColumn(rp.format(temp.getBarang().getHargaJual()))
+                            || checkColumn(temp.getBarang().getBarcodeBy())) {
                         filterData.add(temp);
-                    } else {
-                        Boolean status = false;
-                        for (CetakBarcodeDetail detail : temp.getAllDetail()) {
-                            if (checkColumn(detail.getKodeBarcode())
-                                    || checkColumn(tglLengkap.format(tglSql.parse(detail.getBarang().getBarcodeDate())))
-                                    || checkColumn(detail.getBarang().getNamaBarang())
-                                    || checkColumn(detail.getBarang().getKeterangan())
-                                    || checkColumn(detail.getBarang().getKodeKategori())
-                                    || checkColumn(detail.getBarang().getKodeJenis())
-                                    || checkColumn(detail.getBarang().getKodeGudang())
-                                    || checkColumn(detail.getBarang().getKodeIntern())
-                                    || checkColumn(detail.getBarang().getKadar())
-                                    || checkColumn(detail.getBarang().getStatusBarang())
-                                    || checkColumn(gr.format(detail.getBarang().getBerat()))
-                                    || checkColumn(gr.format(detail.getBarang().getBeratAsli()))
-                                    || checkColumn(rp.format(detail.getBarang().getNilaiPokok()))
-                                    || checkColumn(rp.format(detail.getBarang().getHargaJual()))
-                                    || checkColumn(detail.getBarang().getBarcodeBy())) {
-                                status = true;
-                            }
-                        }
-                        if (status) {
-                            filterData.add(temp);
-                        }
                     }
                 }
             }
+            setTable();
             hitungTotal();
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
 
-    private void selectCetakBarcode(CetakBarcodeHead value) {
-        if (value != null) {
-            try {
-                allDetail.clear();
-                allDetail.addAll(value.getAllDetail());
-            } catch (Exception e) {
-                mainApp.showMessage(Modality.NONE, "Error", e.toString());
-            }
-        } else {
-            allDetail.clear();
+    private void setTable() throws Exception {
+        if (cetakBarcodeHeadTable.getRoot() != null) {
+            cetakBarcodeHeadTable.getRoot().getChildren().clear();
         }
+        List<String> groupBy = new ArrayList<>();
+        for (CetakBarcodeDetail temp : filterData) {
+            if (!groupBy.contains(temp.getNoCetak())) {
+                groupBy.add(temp.getNoCetak());
+            }
+        }
+        for (String temp : groupBy) {
+            CetakBarcodeDetail head = new CetakBarcodeDetail();
+            head.setNoCetak(temp);
+            CetakBarcodeHead p = new CetakBarcodeHead();
+            head.setCetakBarcodeHead(p);
+            Barang j = new Barang();
+            head.setBarang(j);
+            TreeItem<CetakBarcodeDetail> parent = new TreeItem<>(head);
+            double berat = 0;
+            double beratAsli = 0;
+            double beratKemasan = 0;
+            for (CetakBarcodeDetail detail : filterData) {
+                if (temp.equals(detail.getNoCetak())) {
+                    TreeItem<CetakBarcodeDetail> child = new TreeItem<>(detail);
+                    parent.getChildren().addAll(child);
+                    berat = berat + detail.getBarang().getBerat();
+                    beratAsli = beratAsli + detail.getBarang().getBeratAsli();
+                    beratKemasan = beratKemasan + detail.getBarang().getBeratKemasan();
+                }
+            }
+            parent.getValue().getBarang().setBerat(berat);
+            parent.getValue().getBarang().setBeratAsli(beratAsli);
+            parent.getValue().getBarang().setBeratKemasan(beratKemasan);
+            root.getChildren().add(parent);
+        }
+        cetakBarcodeHeadTable.setRoot(root);
     }
 
     private void hitungTotal() {
         int qty = 0;
         double berat = 0;
         double beratAsli = 0;
-        for (CetakBarcodeHead h : filterData) {
-            qty = qty + h.getTotalQty();
-            berat = berat + h.getTotalBerat();
-            beratAsli = beratAsli + h.getTotalBeratAsli();
+        for (CetakBarcodeDetail h : filterData) {
+            qty = qty + 1;
+            berat = berat + h.getBarang().getBerat();
+            beratAsli = beratAsli + h.getBarang().getBeratAsli();
         }
         totalQty.setText(gr.format(qty));
         totalBerat.setText(gr.format(berat));
         totalBeratAsli.setText(gr.format(beratAsli));
+    }
+
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanCetakBarcode(filterData, tglStartPicker.getValue().toString(),
+                    tglAkhirPicker.getValue().toString(), searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 }

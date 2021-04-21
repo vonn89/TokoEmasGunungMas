@@ -565,7 +565,6 @@ public class DetailPenjualanController {
                         }
                     }
                     mainApp.closeDialog(owner, stage);
-                    mainApp.showPenjualan();
                     mainApp.showMessage(Modality.NONE, "Success", "Penjualan berhasil disimpan");
                 } else {
                     mainApp.showMessage(Modality.NONE, "Error", status);

@@ -8,6 +8,8 @@ package com.excellentsystem.TokoEmasGunungMas.View.Report;
 import com.excellentsystem.TokoEmasGunungMas.DAO.BarangDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.PindahDetailDAO;
 import com.excellentsystem.TokoEmasGunungMas.DAO.PindahHeadDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTreeTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
@@ -17,11 +19,9 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
 import com.excellentsystem.TokoEmasGunungMas.Model.Barang;
 import com.excellentsystem.TokoEmasGunungMas.Model.PindahDetail;
 import com.excellentsystem.TokoEmasGunungMas.Model.PindahHead;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import java.sql.Connection;
-import java.text.ParseException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,17 +29,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -49,54 +50,37 @@ import javafx.util.StringConverter;
 public class LaporanPindahGudangController {
 
     @FXML
-    private TableView<PindahHead> pindahGudangHeadTable;
+    private TreeTableView<PindahDetail> pindahGudangHeadTable;
     @FXML
-    private TableColumn<PindahHead, String> noPindahColumn;
+    private TreeTableColumn<PindahDetail, String> noPindahColumn;
     @FXML
-    private TableColumn<PindahHead, String> tglPindahColumn;
+    private TreeTableColumn<PindahDetail, String> tglPindahColumn;
     @FXML
-    private TableColumn<PindahHead, Number> totalQtyColumn;
+    private TreeTableColumn<PindahDetail, String> kodeUserColumn;
     @FXML
-    private TableColumn<PindahHead, Number> totalBeratColumn;
+    private TreeTableColumn<PindahDetail, String> gudangAsalColumn;
     @FXML
-    private TableColumn<PindahHead, Number> totalBeratAsliColumn;
+    private TreeTableColumn<PindahDetail, String> gudangTujuanColumn;
     @FXML
-    private TableColumn<PindahHead, String> kodeUserColumn;
+    private TreeTableColumn<PindahDetail, String> kodeBarcodeColumn;
     @FXML
-    private TableColumn<PindahHead, String> gudangTujuanColumn;
-
+    private TreeTableColumn<PindahDetail, String> namaBarangColumn;
     @FXML
-    private TableView<PindahDetail> pindahGudangDetailTable;
+    private TreeTableColumn<PindahDetail, String> keteranganColumn;
     @FXML
-    private TableColumn<PindahDetail, String> kodeBarcodeColumn;
+    private TreeTableColumn<PindahDetail, String> kodeKategoriColumn;
     @FXML
-    private TableColumn<PindahDetail, String> namaBarangColumn;
+    private TreeTableColumn<PindahDetail, String> kodeJenisColumn;
     @FXML
-    private TableColumn<PindahDetail, String> keteranganColumn;
+    private TreeTableColumn<PindahDetail, String> kodeInternColumn;
     @FXML
-    private TableColumn<PindahDetail, String> kodeKategoriColumn;
+    private TreeTableColumn<PindahDetail, String> kadarColumn;
     @FXML
-    private TableColumn<PindahDetail, String> kodeJenisColumn;
+    private TreeTableColumn<PindahDetail, Number> beratColumn;
     @FXML
-    private TableColumn<PindahDetail, String> kodeInternColumn;
+    private TreeTableColumn<PindahDetail, Number> beratAsliColumn;
     @FXML
-    private TableColumn<PindahDetail, String> kadarColumn;
-    @FXML
-    private TableColumn<PindahDetail, Number> beratColumn;
-    @FXML
-    private TableColumn<PindahDetail, Number> beratAsliColumn;
-    @FXML
-    private TableColumn<PindahDetail, Number> nilaiPokokColumn;
-    @FXML
-    private TableColumn<PindahDetail, Number> hargaJualColumn;
-    @FXML
-    private TableColumn<PindahDetail, String> userBarcodeColumn;
-    @FXML
-    private TableColumn<PindahDetail, String> tglBarcodeColumn;
-    @FXML
-    private TableColumn<PindahDetail, String> statusBarangColumn;
-    @FXML
-    private TableColumn<PindahDetail, String> gudangAsalColumn;
+    private TreeTableColumn<PindahDetail, Number> beratKemasanColumn;
 
     @FXML
     private Label totalQty;
@@ -111,222 +95,96 @@ public class LaporanPindahGudangController {
     @FXML
     private TextField searchField;
     private Main mainApp;
-    private ObservableList<PindahHead> allPindah = FXCollections.observableArrayList();
-    private ObservableList<PindahHead> filterData = FXCollections.observableArrayList();
+    final TreeItem<PindahDetail> root = new TreeItem<>();
+    private ObservableList<PindahDetail> allPindah = FXCollections.observableArrayList();
+    private ObservableList<PindahDetail> filterData = FXCollections.observableArrayList();
     private ObservableList<PindahDetail> allDetail = FXCollections.observableArrayList();
 
     public void initialize() {
-        noPindahColumn.setCellValueFactory(cellData -> cellData.getValue().noPindahProperty());
+        noPindahColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().noPindahProperty());
+
         tglPindahColumn.setCellValueFactory(cellData -> {
             try {
-                return new SimpleStringProperty(tglLengkap.format(
-                        tglSql.parse(cellData.getValue().getTglPindah())));
-            } catch (ParseException ex) {
+                return new SimpleStringProperty(tglLengkap.format(tglSql.parse(cellData.getValue().getValue().getPindahHead().getTglPindah())));
+            } catch (Exception ex) {
                 return null;
             }
         });
-        totalQtyColumn.setCellValueFactory(cellData -> cellData.getValue().totalQtyProperty());
-        totalQtyColumn.setCellFactory(col -> new TableCell<PindahHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        totalBeratColumn.setCellValueFactory(cellData -> cellData.getValue().totalBeratProperty());
-        totalBeratColumn.setCellFactory(col -> new TableCell<PindahHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        totalBeratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().totalBeratAsliProperty());
-        totalBeratAsliColumn.setCellFactory(col -> new TableCell<PindahHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().kodeUserProperty());
+        tglPindahColumn.setComparator(Function.sortDate(tglLengkap));
 
-        kodeBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().kodeBarcodeProperty());
-        tglBarcodeColumn.setCellValueFactory(cellData -> {
-            try {
-                return new SimpleStringProperty(tglLengkap.format(
-                        tglSql.parse(cellData.getValue().getBarang().getBarcodeDate())));
-            } catch (ParseException ex) {
-                return null;
-            }
-        });
-        namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().namaBarangProperty());
-        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().keteranganProperty());
-        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeKategoriProperty());
-        kodeJenisColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeJenisProperty());
-        gudangAsalColumn.setCellValueFactory(cellData -> cellData.getValue().gudangAsalProperty());
-        gudangTujuanColumn.setCellValueFactory(cellData -> cellData.getValue().gudangTujuanProperty());
-        kodeInternColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kodeInternProperty());
-        kadarColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().kadarProperty());
-        beratColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().beratProperty());
-        beratColumn.setCellFactory(col -> new TableCell<PindahDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().beratAsliProperty());
-        beratAsliColumn.setCellFactory(col -> new TableCell<PindahDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
-        nilaiPokokColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().nilaiPokokProperty());
-        nilaiPokokColumn.setCellFactory(col -> new TableCell<PindahDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
-        hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().hargaJualProperty());
-        hargaJualColumn.setCellFactory(col -> new TableCell<PindahDetail, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
-        statusBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().statusBarangProperty());
-        userBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().getBarang().barcodeByProperty());
+        gudangAsalColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().gudangAsalProperty());
 
-        tglStartPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+        gudangTujuanColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPindahHead().gudangTujuanProperty());
 
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
+        kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getPindahHead().kodeUserProperty());
 
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+        kodeBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().kodeBarcodeProperty());
+
+        namaBarangColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().namaBarangProperty());
+
+        keteranganColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().keteranganProperty());
+
+        kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeKategoriProperty());
+
+        kodeJenisColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeJenisProperty());
+
+        kodeInternColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kodeInternProperty());
+
+        kadarColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().kadarProperty());
+
+        beratColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().beratProperty());
+        beratColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().beratAsliProperty());
+        beratAsliColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().getValue().getBarang().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        tglStartPicker.setConverter(Function.getTglConverter());
+        tglStartPicker.setValue(LocalDate.now());
+        tglStartPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
+        tglAkhirPicker.setConverter(Function.getTglConverter());
+        tglAkhirPicker.setValue(LocalDate.now());
+        tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglStartPicker));
+
+        final ContextMenu rowMenu = new ContextMenu();
+        MenuItem cetak = new MenuItem("Print Laporan");
+        cetak.setOnAction((ActionEvent e) -> {
+            printLaporan();
         });
-        tglStartPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglStartPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isAfter(tglAkhirPicker.getValue())) {
-                            this.setDisable(true);
-                        }
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            getPindahGudang();
+        });
+        rowMenu.getItems().addAll(cetak, refresh);
+        pindahGudangHeadTable.setContextMenu(rowMenu);
+        pindahGudangHeadTable.setRowFactory(table -> {
+            TreeTableRow<PindahDetail> row = new TreeTableRow<PindahDetail>() {
+                @Override
+                public void updateItem(PindahDetail item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(rowMenu);
+                    } else {
+                        final ContextMenu rowMenu = new ContextMenu();
+                        MenuItem cetak = new MenuItem("Print Laporan");
+                        cetak.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
+                        MenuItem refresh = new MenuItem("Refresh");
+                        refresh.setOnAction((ActionEvent event) -> {
+                            getPindahGudang();
+                        });
+                        rowMenu.getItems().addAll(cetak, refresh);
+                        setContextMenu(rowMenu);
                     }
-                };
-            }
-        });
-        tglAkhirPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
                 }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+            };
+            return row;
         });
-        tglAkhirPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglAkhirPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isBefore(tglStartPicker.getValue())) {
-                            this.setDisable(true);
-                        }
-                    }
-                };
-            }
-        });
-        pindahGudangHeadTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> selectPindah(newValue));
 
-        allPindah.addListener((ListChangeListener.Change<? extends PindahHead> change) -> {
+        allPindah.addListener((ListChangeListener.Change<? extends PindahDetail> change) -> {
             searchPindah();
         });
         searchField.textProperty().addListener(
@@ -338,8 +196,6 @@ public class LaporanPindahGudangController {
 
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-        pindahGudangHeadTable.setItems(filterData);
-        pindahGudangDetailTable.setItems(allDetail);
         getPindahGudang();
     }
 
@@ -351,18 +207,16 @@ public class LaporanPindahGudangController {
                     tglStartPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
             List<PindahDetail> listPindahDetail = PindahDetailDAO.getAllByTglPindah(con,
                     tglStartPicker.getValue().toString(), tglAkhirPicker.getValue().toString());
-            for (PindahHead h : listPindahHead) {
-                List<PindahDetail> listDetail = new ArrayList<>();
-                for (PindahDetail d : listPindahDetail) {
-                    if (h.getNoPindah().equals(d.getNoPindah())) {
-                        Barang b = BarangDAO.get(con, d.getKodeBarcode());
-                        d.setBarang(b);
-                        listDetail.add(d);
+            for (PindahDetail d : listPindahDetail) {
+                for (PindahHead h : listPindahHead) {
+                    if (d.getNoPindah().equals(h.getNoPindah())) {
+                        d.setPindahHead(h);
                     }
                 }
-                h.setAllDetail(listDetail);
+                Barang b = BarangDAO.get(con, d.getKodeBarcode());
+                d.setBarang(b);
             }
-            allPindah.addAll(listPindahHead);
+            allPindah.addAll(listPindahDetail);
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
@@ -380,75 +234,103 @@ public class LaporanPindahGudangController {
     private void searchPindah() {
         try {
             filterData.clear();
-            for (PindahHead temp : allPindah) {
+            for (PindahDetail temp : allPindah) {
                 if (searchField.getText() == null || searchField.getText().equals("")) {
                     filterData.add(temp);
                 } else {
                     if (checkColumn(temp.getNoPindah())
-                            || checkColumn(temp.getGudangTujuan())
-                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getTglPindah())))
-                            || checkColumn(gr.format(temp.getTotalQty()))
-                            || checkColumn(gr.format(temp.getTotalBerat()))
-                            || checkColumn(gr.format(temp.getTotalBeratAsli()))
-                            || checkColumn(temp.getKodeUser())) {
+                            || checkColumn(temp.getPindahHead().getGudangTujuan())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getPindahHead().getTglPindah())))
+                            || checkColumn(gr.format(temp.getPindahHead().getTotalQty()))
+                            || checkColumn(gr.format(temp.getPindahHead().getTotalBerat()))
+                            || checkColumn(gr.format(temp.getPindahHead().getTotalBeratAsli()))
+                            || checkColumn(temp.getPindahHead().getKodeUser())
+                            || checkColumn(temp.getKodeBarcode())
+                            || checkColumn(tglLengkap.format(tglSql.parse(temp.getBarang().getBarcodeDate())))
+                            || checkColumn(temp.getBarang().getNamaBarang())
+                            || checkColumn(temp.getBarang().getKeterangan())
+                            || checkColumn(temp.getBarang().getKodeKategori())
+                            || checkColumn(temp.getBarang().getKodeJenis())
+                            || checkColumn(temp.getBarang().getKodeIntern())
+                            || checkColumn(temp.getBarang().getKadar())
+                            || checkColumn(temp.getBarang().getStatusBarang())
+                            || checkColumn(gr.format(temp.getBarang().getBerat()))
+                            || checkColumn(gr.format(temp.getBarang().getBeratAsli()))
+                            || checkColumn(rp.format(temp.getBarang().getNilaiPokok()))
+                            || checkColumn(rp.format(temp.getBarang().getHargaJual()))
+                            || checkColumn(temp.getGudangAsal())
+                            || checkColumn(temp.getBarang().getBarcodeBy())) {
                         filterData.add(temp);
-                    } else {
-                        Boolean status = false;
-                        for (PindahDetail detail : temp.getAllDetail()) {
-                            if (checkColumn(detail.getKodeBarcode())
-                                    || checkColumn(tglLengkap.format(tglSql.parse(detail.getBarang().getBarcodeDate())))
-                                    || checkColumn(detail.getBarang().getNamaBarang())
-                                    || checkColumn(detail.getBarang().getKeterangan())
-                                    || checkColumn(detail.getBarang().getKodeKategori())
-                                    || checkColumn(detail.getBarang().getKodeJenis())
-                                    || checkColumn(detail.getBarang().getKodeIntern())
-                                    || checkColumn(detail.getBarang().getKadar())
-                                    || checkColumn(detail.getBarang().getStatusBarang())
-                                    || checkColumn(gr.format(detail.getBarang().getBerat()))
-                                    || checkColumn(gr.format(detail.getBarang().getBeratAsli()))
-                                    || checkColumn(rp.format(detail.getBarang().getNilaiPokok()))
-                                    || checkColumn(rp.format(detail.getBarang().getHargaJual()))
-                                    || checkColumn(detail.getGudangAsal())
-                                    || checkColumn(detail.getBarang().getBarcodeBy())) {
-                                status = true;
-                            }
-                        }
-                        if (status) {
-                            filterData.add(temp);
-                        }
                     }
                 }
             }
+            setTable();
             hitungTotal();
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());
         }
     }
 
-    private void selectPindah(PindahHead value) {
-        if (value != null) {
-            try {
-                allDetail.clear();
-                allDetail.addAll(value.getAllDetail());
-            } catch (Exception e) {
-                mainApp.showMessage(Modality.NONE, "Error", e.toString());
-            }
-        } else {
-            allDetail.clear();
+    private void setTable() throws Exception {
+        if (pindahGudangHeadTable.getRoot() != null) {
+            pindahGudangHeadTable.getRoot().getChildren().clear();
         }
+        List<String> groupBy = new ArrayList<>();
+        for (PindahDetail temp : filterData) {
+            if (!groupBy.contains(temp.getNoPindah())) {
+                groupBy.add(temp.getNoPindah());
+            }
+        }
+        for (String temp : groupBy) {
+            PindahDetail head = new PindahDetail();
+            head.setNoPindah(temp);
+            PindahHead p = new PindahHead();
+            head.setPindahHead(p);
+            Barang j = new Barang();
+            head.setBarang(j);
+            TreeItem<PindahDetail> parent = new TreeItem<>(head);
+            double berat = 0;
+            double beratAsli = 0;
+            double beratKemasan = 0;
+            for (PindahDetail detail : filterData) {
+                if (temp.equals(detail.getNoPindah())) {
+                    TreeItem<PindahDetail> child = new TreeItem<>(detail);
+                    parent.getChildren().addAll(child);
+                    berat = berat + detail.getBarang().getBerat();
+                    beratAsli = beratAsli + detail.getBarang().getBeratAsli();
+                    beratKemasan = beratKemasan + detail.getBarang().getBeratKemasan();
+                }
+            }
+            parent.getValue().getBarang().setBerat(berat);
+            parent.getValue().getBarang().setBeratAsli(beratAsli);
+            parent.getValue().getBarang().setBeratKemasan(beratKemasan);
+            root.getChildren().add(parent);
+        }
+        pindahGudangHeadTable.setRoot(root);
     }
 
     private void hitungTotal() {
         int qty = 0;
         double berat = 0;
         double beratAsli = 0;
-        for (PindahHead h : filterData) {
-            qty = qty + h.getTotalQty();
-            berat = berat + h.getTotalBerat();
-            beratAsli = beratAsli + h.getTotalBeratAsli();
+        for (PindahDetail h : filterData) {
+            qty = qty + 1;
+            berat = berat + h.getBarang().getBerat();
+            beratAsli = beratAsli + h.getBarang().getBeratAsli();
         }
         totalQty.setText(gr.format(qty));
         totalBerat.setText(gr.format(berat));
         totalBeratAsli.setText(gr.format(beratAsli));
+    }
+
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanPindahGudang(filterData, tglStartPicker.getValue().toString(),
+                    tglAkhirPicker.getValue().toString(), searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
     }
 }

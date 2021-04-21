@@ -53,6 +53,8 @@ public class HancurBarangController {
     private TableColumn<Barang, Number> beratColumn;
     @FXML
     private TableColumn<Barang, Number> beratAsliColumn;
+    @FXML
+    private TableColumn<Barang, Number> beratKemasanColumn;
 
     public Label totalQty;
     public Label totalBerat;
@@ -87,6 +89,18 @@ public class HancurBarangController {
         });
         beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().beratAsliProperty());
         beratAsliColumn.setCellFactory(col -> new TableCell<Barang, Number>() {
+            @Override
+            public void updateItem(Number value, boolean empty) {
+                super.updateItem(value, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(gr.format(value.doubleValue()));
+                }
+            }
+        });
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> new TableCell<Barang, Number>() {
             @Override
             public void updateItem(Number value, boolean empty) {
                 super.updateItem(value, empty);
@@ -146,11 +160,13 @@ public class HancurBarangController {
     }
 
     private void hitungTotal() {
+        double beratAll = 0;
         double beratAsli = 0;
         double berat = 0;
         int qty = 0;
         for (Barang b : allBarang) {
             if (b.isStatus()) {
+                beratAll = beratAll + b.getBeratAsli() + b.getBeratKemasan();
                 beratAsli = beratAsli + b.getBeratAsli();
                 berat = berat + b.getBerat();
                 qty = qty + 1;
@@ -159,7 +175,7 @@ public class HancurBarangController {
         totalBerat.setText(gr.format(berat));
         totalQty.setText(gr.format(qty));
         totalBeratAsli.setText(gr.format(beratAsli));
-        totalBeratLabel.setText(gr.format(beratAsli + (qty * Main.sistem.getBeratLabel())));
+        totalBeratLabel.setText(gr.format(beratAll + (qty * Main.sistem.getBeratLabel())));
     }
 
     @FXML

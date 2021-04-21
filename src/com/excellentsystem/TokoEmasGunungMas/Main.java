@@ -31,7 +31,10 @@ import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DataKategoriBarangContr
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DataKategoriTransaksiController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DataTokoController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DataUserController;
+import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DetailGadaiController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DetailPelunasanGadaiController;
+import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DetailPembelianController;
+import com.excellentsystem.TokoEmasGunungMas.View.Dialog.DetailPenjualanController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.MessageController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.SettingGadaiController;
 import com.excellentsystem.TokoEmasGunungMas.View.Dialog.UbahPasswordController;
@@ -128,6 +131,7 @@ public class Main extends Application {
 
     public static final String version = "1.0.0";
     public static String ipServer = "localhost";
+    public static String kodeToko = "";
     public static String printerPenjualan = "LX-310";
     public static String printerGadai = "TMU-220";
     public static String printerBarcode = "GT-820";
@@ -136,6 +140,7 @@ public class Main extends Application {
         try {
             BufferedReader in = new BufferedReader(new FileReader("koneksi.txt"));
             ipServer = in.readLine();
+            kodeToko = in.readLine();
             printerPenjualan = in.readLine();
             printerGadai = in.readLine();
             printerBarcode = in.readLine();
@@ -173,7 +178,7 @@ public class Main extends Application {
     }
 
     private void tutupToko() {
-        try (Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             while (tglBarang.parse(sistem.getTglSystem()).before(
                     tglBarang.parse(tglBarang.format(new Date())))) {
                 StokBarangDAO.insertNewStokBarang(con);
@@ -355,18 +360,39 @@ public class Main extends Application {
         mainController.setTitle("Stok Opname Barang");
     }
 
-    public void showPenjualan() {
+    public void showPenjualanBaru() {
+        Stage stage = new Stage();
+        FXMLLoader loader = showDialog(MainStage, stage, "View/Dialog/DetailPenjualan.fxml");
+        DetailPenjualanController controller = loader.getController();
+        controller.setMainApp(this, MainStage, stage);
+    }
+
+    public void showDataPenjualan() {
         FXMLLoader loader = changeStage("View/Penjualan.fxml");
         PenjualanController controller = loader.getController();
         controller.setMainApp(this);
         mainController.setTitle("Data Penjualan");
     }
 
-    public void showPembelian() {
+    public void showPembelianBaru() {
+        Stage stage = new Stage();
+        FXMLLoader loader = showDialog(MainStage, stage, "View/Dialog/DetailPembelian.fxml");
+        DetailPembelianController controller = loader.getController();
+        controller.setMainApp(this, MainStage, stage);
+    }
+
+    public void showDataPembelian() {
         FXMLLoader loader = changeStage("View/Pembelian.fxml");
         PembelianController controller = loader.getController();
         controller.setMainApp(this);
         mainController.setTitle("Data Pembelian");
+    }
+
+    public void showTerimaGadai() {
+        Stage stage = new Stage();
+        FXMLLoader loader = showDialog(MainStage, stage, "View/Dialog/DetailGadai.fxml");
+        DetailGadaiController controller = loader.getController();
+        controller.setMainApp(this, MainStage, stage);
     }
 
     public void showDataTerimaGadai() {

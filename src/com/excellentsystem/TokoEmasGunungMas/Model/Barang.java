@@ -29,6 +29,7 @@ public class Barang {
     private final StringProperty kadar = new SimpleStringProperty();
     private final DoubleProperty berat = new SimpleDoubleProperty();
     private final DoubleProperty beratAsli = new SimpleDoubleProperty();
+    private final DoubleProperty beratKemasan = new SimpleDoubleProperty();
     private final DoubleProperty nilaiPokok = new SimpleDoubleProperty();
     private final DoubleProperty hargaJual = new SimpleDoubleProperty();
     private final StringProperty statusBarang = new SimpleStringProperty();
@@ -40,6 +41,19 @@ public class Barang {
     private final StringProperty soldBy = new SimpleStringProperty();
     private Kategori kategori;
 
+    public double getBeratKemasan() {
+        return beratKemasan.get();
+    }
+
+    public void setBeratKemasan(double value) {
+        beratKemasan.set(value);
+    }
+
+    public DoubleProperty beratKemasanProperty() {
+        return beratKemasan;
+    }
+    
+    
 
     public String getDeletedBy() {
         return deletedBy.get();

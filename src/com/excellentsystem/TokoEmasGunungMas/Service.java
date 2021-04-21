@@ -470,7 +470,7 @@ public class Service {
                                     stokMasuk.setBeratAkhir((double) Math.round((stokMasuk.getBeratAkhir() + b.getBerat()) * 100) / 100);
                                     stokMasuk.setBeratAsliAkhir((double) Math.round((stokMasuk.getBeratAsliAkhir() + b.getBeratAsli()) * 100) / 100);
                                     stokMasuk.setStokAkhir(stokMasuk.getStokAkhir() + 1);
-                                    StokBarangDAO.insert(con, stokMasuk);
+                                    StokBarangDAO.update(con, stokMasuk);
                                 }
                                 stok.setBeratKeluar(stok.getBeratKeluar() + b.getBerat());
                                 stok.setBeratAsliKeluar(stok.getBeratAsliKeluar() + b.getBeratAsli());

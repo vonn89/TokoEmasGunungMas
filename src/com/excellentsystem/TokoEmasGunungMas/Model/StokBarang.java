@@ -5,14 +5,12 @@
  */
 package com.excellentsystem.TokoEmasGunungMas.Model;
 
-import com.excellentsystem.TokoEmasGunungMas.Model.Jenis;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import com.excellentsystem.TokoEmasGunungMas.Model.Barang;
 
 /**
  *
@@ -38,6 +36,7 @@ public class StokBarang {
     private final IntegerProperty stokAkhir = new SimpleIntegerProperty();
     private Jenis jenis;
     private Barang barang;
+
 
     public Barang getBarang() {
         return barang;

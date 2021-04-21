@@ -458,11 +458,9 @@ public class DetailPelunasanGadaiController {
                         }
                     }
                     mainApp.closeDialog(owner, stage);
-                    mainApp.showDataTerimaGadai();
                     mainApp.showMessage(Modality.NONE, "Success", "Bayar bunga/cicil gadai berhasil disimpan");
                 } else {
                     mainApp.closeDialog(owner, stage);
-                    mainApp.showDataPelunasanGadai();
                     mainApp.showMessage(Modality.NONE, "Success", "Pelunasan gadai berhasil disimpan");
                 }
             } else {

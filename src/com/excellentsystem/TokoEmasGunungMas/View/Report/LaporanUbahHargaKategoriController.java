@@ -6,18 +6,19 @@
 package com.excellentsystem.TokoEmasGunungMas.View.Report;
 
 import com.excellentsystem.TokoEmasGunungMas.DAO.LogHargaDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
 import static com.excellentsystem.TokoEmasGunungMas.Main.rp;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglBarang;
+import static com.excellentsystem.TokoEmasGunungMas.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglNormal;
 import com.excellentsystem.TokoEmasGunungMas.Model.LogHarga;
 import java.sql.Connection;
 import java.text.ParseException;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -25,15 +26,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -73,125 +70,25 @@ public class LaporanUbahHargaKategoriController {
                 return null;
             }
         });
+        tanggalColumn.setComparator(Function.sortDate(tglLengkap));
+        
         kodeKategoriColumn.setCellValueFactory(cellData -> cellData.getValue().kodeKategoriProperty());
+        
         hargaBeliColumn.setCellValueFactory(cellData -> cellData.getValue().hargaBeliProperty());
-        hargaBeliColumn.setCellFactory(col -> new TableCell<LogHarga, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
+        hargaBeliColumn.setCellFactory(col -> getTableCell(rp));
+        
         hargaJualColumn.setCellValueFactory(cellData -> cellData.getValue().hargaJualProperty());
-        hargaJualColumn.setCellFactory(col -> new TableCell<LogHarga, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
+        hargaJualColumn.setCellFactory(col -> getTableCell(rp));
+        
         kodeUserColumn.setCellValueFactory(cellData -> cellData.getValue().userProperty());
 
-        tglStartPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-        tglStartPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglStartPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isAfter(tglAkhirPicker.getValue())) {
-                            this.setDisable(true);
-                        }
-                    }
-                };
-            }
-        });
-        tglAkhirPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-        tglAkhirPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        tglAkhirPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isBefore(tglStartPicker.getValue())) {
-                            this.setDisable(true);
-                        }
-                    }
-                };
-            }
-        });
+        tglStartPicker.setConverter(Function.getTglConverter());
+        tglStartPicker.setValue(LocalDate.now());
+        tglStartPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(tglAkhirPicker));
+        tglAkhirPicker.setConverter(Function.getTglConverter());
+        tglAkhirPicker.setValue(LocalDate.now());
+        tglAkhirPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(tglStartPicker));
+        
 
         allLogHarga.addListener((ListChangeListener.Change<? extends LogHarga> change) -> {
             searchLogHarga();

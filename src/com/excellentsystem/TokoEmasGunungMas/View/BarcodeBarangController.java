@@ -93,6 +93,8 @@ public class BarcodeBarangController {
     @FXML
     private TableColumn<Barang, Number> beratAsliColumn;
     @FXML
+    private TableColumn<Barang, Number> beratKemasanColumn;
+    @FXML
     private TableColumn<Barang, Number> nilaiPokokColumn;
     @FXML
     private TableColumn<Barang, String> userBarcodeColumn;
@@ -124,6 +126,8 @@ public class BarcodeBarangController {
     @FXML
     private TextField kodeInternField;
     @FXML
+    private TextField beratKemasanField;
+    @FXML
     private Button saveButton;
     @FXML
     private Label totalQty;
@@ -152,6 +156,8 @@ public class BarcodeBarangController {
         beratColumn.setCellFactory(col -> getTableCell(gr));
         beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().beratAsliProperty());
         beratAsliColumn.setCellFactory(col -> getTableCell(gr));
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> getTableCell(gr));
         nilaiPokokColumn.setCellValueFactory(cellData -> cellData.getValue().nilaiPokokProperty());
         nilaiPokokColumn.setCellFactory(col -> getTableCell(rp));
         userBarcodeColumn.setCellValueFactory(cellData -> cellData.getValue().barcodeByProperty());
@@ -243,6 +249,7 @@ public class BarcodeBarangController {
         });
         Function.setRpField(hargaPokokField);
         Function.setBeratField(beratField);
+        Function.setBeratField(beratKemasanField);
         beratAsliField.setOnKeyReleased((event) -> {
             hitungHargaPokok();
         });
@@ -290,7 +297,13 @@ public class BarcodeBarangController {
         });
         kodeInternField.setOnKeyPressed((KeyEvent keyEvent) -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
-                saveButton.fire();
+                beratKemasanField.selectAll();
+                beratKemasanField.requestFocus();
+            }
+        });
+        beratKemasanField.setOnKeyPressed((KeyEvent keyEvent) -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                saveButton.requestFocus();
             }
         });
         saveButton.setOnKeyPressed((KeyEvent keyEvent) -> {
@@ -377,11 +390,13 @@ public class BarcodeBarangController {
     }
 
     private void hitungTotal() {
+        double beratAll = 0;
         double beratAsli = 0;
         double berat = 0;
         int qty = 0;
         for (Barang b : allBarang) {
             if (b.isStatus()) {
+                beratAll = beratAll + b.getBeratAsli() + b.getBeratKemasan();
                 beratAsli = beratAsli + b.getBeratAsli();
                 berat = berat + b.getBerat();
                 qty = qty + 1;
@@ -390,7 +405,7 @@ public class BarcodeBarangController {
         totalBerat.setText(gr.format(berat));
         totalQty.setText(gr.format(qty));
         totalBeratAsli.setText(gr.format(beratAsli));
-        totalBeratLabel.setText(gr.format(beratAsli + (qty * Main.sistem.getBeratLabel())));
+        totalBeratLabel.setText(gr.format(beratAll + (qty * Main.sistem.getBeratLabel())));
     }
 
     @FXML
@@ -464,6 +479,8 @@ public class BarcodeBarangController {
             mainApp.showMessage(Modality.NONE, "Warning", "Berat masih kosong");
         } else if (beratAsliField.getText().equals("") || beratAsliField.getText().equals("0")) {
             mainApp.showMessage(Modality.NONE, "Warning", "Berat asli masih kosong");
+        } else if (beratKemasanField.getText().equals("") ) {
+            mainApp.showMessage(Modality.NONE, "Warning", "Berat kemasan masih kosong");
         } else if (Integer.parseInt(qtyJenisField.getText()) < 1) {
             mainApp.showMessage(Modality.NONE, "Warning", "Qty barang sudah habis / tidak ada");
         } else if (Double.parseDouble(beratField.getText().replaceAll(",", ""))
@@ -484,6 +501,7 @@ public class BarcodeBarangController {
                 b.setKadar(kadarField.getText());
                 b.setBerat(Double.parseDouble(beratField.getText().replaceAll(",", "")));
                 b.setBeratAsli(Double.parseDouble(beratAsliField.getText().replaceAll(",", "")));
+                b.setBeratKemasan(Double.parseDouble(beratKemasanField.getText().replaceAll(",", "")));
                 b.setNilaiPokok(Double.parseDouble(hargaPokokField.getText().replaceAll(",", "")));
                 b.setHargaJual(Math.ceil(jenisCombo.getSelectionModel().getSelectedItem().getKategori().getHargaJual() * b.getBerat() * 500) / 500);
                 b.setStatusBarang("Tersedia");

@@ -111,7 +111,6 @@ public class AddBarangTerjualController {
     private Stage stage;
     private Stage owner;
 
-
     public void initialize() {
         noPenjualanColumn.setCellValueFactory(param -> param.getValue().noPenjualanProperty());
         tglPenjualanColumn.setCellValueFactory(cellData -> {
@@ -228,11 +227,11 @@ public class AddBarangTerjualController {
     }
 
     public void getPenjualanDetail() {
-        try(Connection con = Koneksi.getConnection()){
+        try (Connection con = Koneksi.getConnection()) {
             allPenjualanDetail.clear();
-            List<PenjualanDetail> listPenjualanDetail = PenjualanDetailDAO.getAllByTglPenjualanAndStatus(con, 
+            List<PenjualanDetail> listPenjualanDetail = PenjualanDetailDAO.getAllByTglPenjualanAndStatus(con,
                     tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
-            List<PenjualanHead> listPenjualanHead = PenjualanHeadDAO.getAllByTglPenjualanAndStatus(con, 
+            List<PenjualanHead> listPenjualanHead = PenjualanHeadDAO.getAllByTglPenjualanAndStatus(con,
                     tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
             List<Barang> listBarang = BarangDAO.getAll(con, "Terjual", "Semua", "Semua", "Semua", "Semua");
             for (PenjualanDetail d : listPenjualanDetail) {

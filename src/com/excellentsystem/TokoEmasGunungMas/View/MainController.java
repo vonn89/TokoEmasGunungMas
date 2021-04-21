@@ -17,6 +17,8 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -55,14 +57,28 @@ public class MainController {
 
     @FXML
     private TitledPane penjualanPane;
+    @FXML
+    private VBox penjualanVbox;
+    @FXML
+    private MenuButton penjualanBaru;
+    @FXML
+    private MenuButton dataPenjualan;
 
     @FXML
     private TitledPane pembelianPane;
+    @FXML
+    private VBox pembelianVbox;
+    @FXML
+    private MenuButton pembelianBaru;
+    @FXML
+    private MenuButton dataPembelian;
 
     @FXML
     private TitledPane gadaiPane;
     @FXML
     private VBox gadaiVbox;
+    @FXML
+    private MenuButton terimaGadai;
     @FXML
     private MenuButton dataTerimaGadai;
     @FXML
@@ -126,10 +142,13 @@ public class MainController {
         try {
             this.mainApp = mainApp;
             vbox.setPrefWidth(0);
-            for (Node n : accordion.getPanes()) {
+            for (Node n : barangVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
-            for (Node n : barangVbox.getChildren()) {
+            for (Node n : penjualanVbox.getChildren()) {
+                n.managedProperty().bind(n.visibleProperty());
+            }
+            for (Node n : pembelianVbox.getChildren()) {
                 n.managedProperty().bind(n.visibleProperty());
             }
             for (Node n : gadaiVbox.getChildren()) {
@@ -153,103 +172,151 @@ public class MainController {
 
     public void setUser() {
         BorderPane border = (BorderPane) mainApp.mainLayout.getCenter();
-        border.setCenter(null);
+        ImageView img = new ImageView(new Image(Main.class.getResourceAsStream("Resource/ESystemslogoonlywhite.png")));
+        img.setFitHeight(150);
+        img.setFitWidth(150);
+        border.setCenter(img);
         if (user == null) {
             loginButton.setText("Login");
             logoutButton.setVisible(false);
             ubahPasswordButton.setVisible(false);
             mainApp.showLoginScene();
 
-//            accordion.getPanes().remove(dashboardPane);
-//            
-//            stokBarangDalam.setVisible(false);
-//            tambahBarang.setVisible(false);
-//            ambilBarang.setVisible(false);
-//            barcodeBarang.setVisible(false);
-//            detailBarangBarcode.setVisible(false);
-//            stokBarangBarcode.setVisible(false);
-//            
-//            accordion.getPanes().remove(penjualanPane);
-//            
-//            accordion.getPanes().remove(pembelianPane);
-//            
-//            dataTerimaGadai.setVisible(false);
-//            pelunasanGadai.setVisible(false);
-//            dataPelunasanGadai.setVisible(false);
-//            
-//            accordion.getPanes().remove(keuanganPane);
-//            
-//            dataPelanggan.setVisible(false);
-//            dataSales.setVisible(false);
-//            dataUser.setVisible(false);
-//            dataToko.setVisible(false);
-//            dataGudang.setVisible(false);
-//            kategoriBarang.setVisible(false);
-//            jenisBarang.setVisible(false);
-//            kategoriTransaksi.setVisible(false);
-//            pengaturanGadai.setVisible(false);
-//            
-//            laporanBarang.setVisible(false);
-//            laporanPenjualan.setVisible(false);
-//            laporanPembelian.setVisible(false);
-//            laporanGadai.setVisible(false);
-//            laporanKeuangan.setVisible(false);
+            dataBarangNonBarcode.setVisible(false);
+            barcodeBarang.setVisible(false);
+            dataBarangBarcode.setVisible(false);
+            stokBarangBarcode.setVisible(false);
+
+            penjualanBaru.setVisible(false);
+            dataPenjualan.setVisible(false);
+            pembelianBaru.setVisible(false);
+            dataPembelian.setVisible(false);
+            terimaGadai.setVisible(false);
+            dataTerimaGadai.setVisible(false);
+            pelunasanGadai.setVisible(false);
+            dataPelunasanGadai.setVisible(false);
+
+            dataPelanggan.setVisible(false);
+            dataSales.setVisible(false);
+            dataUser.setVisible(false);
+            dataToko.setVisible(false);
+            dataGudang.setVisible(false);
+            kategoriBarang.setVisible(false);
+            jenisBarang.setVisible(false);
+            kategoriTransaksi.setVisible(false);
+            pengaturanGadai.setVisible(false);
+
+            laporanBarang.setVisible(false);
+            laporanPenjualan.setVisible(false);
+            laporanPembelian.setVisible(false);
+            laporanGadai.setVisible(false);
+            laporanKeuangan.setVisible(false);
         } else {
             logoutButton.setVisible(true);
             ubahPasswordButton.setVisible(true);
             loginButton.setText(user.getUsername());
-            mainApp.showDashboard();
             for (Otoritas o : user.getOtoritas()) {
-//                if(o.getJenis().equals("Stok Barang Dalam")){
-//                    stokBarangDalam.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Tambah Barang")){
-//                    tambahBarang.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Ambil Barang")){
-//                    ambilBarang.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Barcode Barang")){
-//                    barcodeBarang.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Detail Barang Barcode")){
-//                    detailBarangBarcode.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Stok Barang Barcode")){
-//                    stokBarangBarcode.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Data Penjualan")){
-//                    if(o.isStatus())
-//                        accordion.getPanes().add(1, penjualanPane);
-//                    else
-//                        accordion.getPanes().remove(penjualanPane);
-//                }else if(o.getJenis().equals("Data Pembelian")){
-//                    if(o.isStatus())
-//                        accordion.getPanes().add(2, pembelianPane);
-//                    else
-//                        accordion.getPanes().remove(pembelianPane);
-//                }else if(o.getJenis().equals("Data Terima Gadai")){
-//                    dataTerimaGadai.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Pelunasan Gadai")){
-//                    pelunasanGadai.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Data Pelunasan Gadai")){
-//                    dataPelunasanGadai.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Keuangan")){
-//                    if(o.isStatus())
-//                        accordion.getPanes().add(4, keuanganPane);
-//                    else
-//                        accordion.getPanes().remove(keuanganPane);
-//                }else if(o.getJenis().equals("Data Pelanggan")){
-//                    dataPelanggan.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Data Sales")){
-//                    dataSales.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Laporan Barang")){
-//                    laporanBarang.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Laporan Penjualan")){
-//                    laporanPenjualan.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Laporan Pembelian")){
-//                    laporanPembelian.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Laporan Gadai")){
-//                    laporanGadai.setVisible(o.isStatus());
-//                }else if(o.getJenis().equals("Laporan Keuangan")){
-//                    laporanKeuangan.setVisible(o.isStatus());
-//                }
+                if (o.getJenis().equals("Dashboard")) {
+                    if (o.isStatus()) {
+                        mainApp.showDashboard();
+                    } else {
+                        accordion.getPanes().remove(dashboardPane);
+                    }
+                } else if (o.getJenis().equals("Data Barang Non Barcode")) {
+                    dataBarangNonBarcode.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Barcode Barang")) {
+                    barcodeBarang.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Barang Barcode")) {
+                    dataBarangBarcode.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Stok Barang Barcode")) {
+                    stokBarangBarcode.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Penjualan Baru")) {
+                    penjualanBaru.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Penjualan")) {
+                    dataPenjualan.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Pembelian Baru")) {
+                    pembelianBaru.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Pembelian")) {
+                    dataPembelian.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Terima Gadai")) {
+                    terimaGadai.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Terima Gadai")) {
+                    dataTerimaGadai.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Pelunasan Gadai")) {
+                    pelunasanGadai.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Pelunasan Gadai")) {
+                    dataPelunasanGadai.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Keuangan") && o.isStatus() == false) {
+                    accordion.getPanes().remove(keuanganPane);
+                } else if (o.getJenis().equals("Data Pelanggan")) {
+                    dataPelanggan.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Sales")) {
+                    dataSales.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data User")) {
+                    dataUser.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Toko")) {
+                    dataToko.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Data Gudang")) {
+                    dataGudang.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Kategori Barang")) {
+                    kategoriBarang.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Jenis Barang")) {
+                    jenisBarang.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Kategori Transaksi")) {
+                    kategoriTransaksi.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Pengaturan Gadai")) {
+                    pengaturanGadai.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Laporan Barang")) {
+                    laporanBarang.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Laporan Penjualan")) {
+                    laporanPenjualan.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Laporan Pembelian")) {
+                    laporanPembelian.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Laporan Gadai")) {
+                    laporanGadai.setVisible(o.isStatus());
+                } else if (o.getJenis().equals("Laporan Keuangan")) {
+                    laporanKeuangan.setVisible(o.isStatus());
+                }
             }
         }
+            if (barcodeBarang.isVisible() == false
+                    && dataBarangNonBarcode.isVisible() == false
+                    && dataBarangBarcode.isVisible() == false
+                    && stokBarangBarcode.isVisible() == false) {
+                accordion.getPanes().remove(barangPane);
+            }
+            if (penjualanBaru.isVisible() == false
+                    && dataPenjualan.isVisible() == false) {
+                accordion.getPanes().remove(penjualanPane);
+            }
+            if (pembelianBaru.isVisible() == false
+                    && dataPembelian.isVisible() == false) {
+                accordion.getPanes().remove(pembelianPane);
+            }
+            if (terimaGadai.isVisible() == false
+                    && pelunasanGadai.isVisible() == false
+                    && dataTerimaGadai.isVisible() == false
+                    && dataPelunasanGadai.isVisible() == false) {
+                accordion.getPanes().remove(gadaiPane);
+            }
+            if (laporanBarang.isVisible() == false
+                    && laporanPenjualan.isVisible() == false
+                    && laporanPembelian.isVisible() == false
+                    && laporanGadai.isVisible() == false
+                    && laporanKeuangan.isVisible() == false) {
+                accordion.getPanes().remove(laporanPane);
+            }
+            if (pengaturanGadai.isVisible() == false
+                    && dataPelanggan.isVisible() == false
+                    && kategoriBarang.isVisible() == false
+                    && jenisBarang.isVisible() == false
+                    && kategoriTransaksi.isVisible() == false
+                    && dataGudang.isVisible() == false
+                    && dataToko.isVisible() == false
+                    && dataUser.isVisible() == false
+                    && dataSales.isVisible() == false) {
+                accordion.getPanes().remove(pengaturanPane);
+            }
     }
 
     @FXML
@@ -296,8 +363,9 @@ public class MainController {
 
     public void setTitle(String x) {
         title.setText(x);
-        if (vbox.getPrefWidth()!=0) 
+        if (vbox.getPrefWidth() != 0) {
             showMenu();
+        }
     }
 
     @FXML
@@ -351,13 +419,28 @@ public class MainController {
     }
 
     @FXML
+    private void showPenjualanBaru() {
+        mainApp.showPenjualanBaru();
+    }
+
+    @FXML
     private void showPenjualan() {
-        mainApp.showPenjualan();
+        mainApp.showDataPenjualan();
+    }
+
+    @FXML
+    private void showPembelianBaru() {
+        mainApp.showPembelianBaru();
     }
 
     @FXML
     private void showPembelian() {
-        mainApp.showPembelian();
+        mainApp.showDataPembelian();
+    }
+
+    @FXML
+    private void showTerimaGadai() {
+        mainApp.showTerimaGadai();
     }
 
     @FXML

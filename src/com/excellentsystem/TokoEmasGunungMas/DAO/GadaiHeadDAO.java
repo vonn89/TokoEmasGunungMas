@@ -227,7 +227,7 @@ public class GadaiHeadDAO {
     }
     public static void updateBungaGadai(Connection con)throws Exception{
         PreparedStatement ps = con.prepareStatement("update tm_gadai_head "
-                + " set lama_pinjam=datediff(?,concat('20',SUBSTRING(no_gadai,4,2),'-',SUBSTRING(no_gadai,06,2),'-',SUBSTRING(no_gadai,08,2))),"
+                + " set lama_pinjam=datediff(?,tgl_gadai),"
                 + " bunga_komp=ceil(total_pinjaman*bunga_persen/100/30*lama_pinjam/500)*500 , "
                 + " bunga_rp=ceil(total_pinjaman*bunga_persen/100/30*lama_pinjam/500)*500 "
                 + " where status='Belum Lunas'");

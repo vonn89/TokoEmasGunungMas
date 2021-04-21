@@ -50,6 +50,8 @@ public class CetakBarcodeController {
     private TableColumn<Barang, Number> beratColumn;
     @FXML
     private TableColumn<Barang, Number> beratAsliColumn;
+    @FXML
+    private TableColumn<Barang, Number> beratKemasanColumn;
 
     public Label totalQty;
     public Label totalBerat;
@@ -74,6 +76,8 @@ public class CetakBarcodeController {
         beratColumn.setCellFactory(col -> getTableCell(gr));
         beratAsliColumn.setCellValueFactory(cellData -> cellData.getValue().beratAsliProperty());
         beratAsliColumn.setCellFactory(col -> getTableCell(gr));
+        beratKemasanColumn.setCellValueFactory(cellData -> cellData.getValue().beratKemasanProperty());
+        beratKemasanColumn.setCellFactory(col -> getTableCell(gr));
 
         final ContextMenu rowMenu = new ContextMenu();
         MenuItem refresh = new MenuItem("Refresh");
@@ -130,11 +134,13 @@ public class CetakBarcodeController {
     }
 
     private void hitungTotal() {
+        double beratAll = 0;
         double beratAsli = 0;
         double berat = 0;
         int qty = 0;
         for (Barang b : allBarang) {
             if (b.isStatus()) {
+                beratAll = beratAll + b.getBeratAsli() + b.getBeratKemasan();
                 beratAsli = beratAsli + b.getBeratAsli();
                 berat = berat + b.getBerat();
                 qty = qty + 1;
@@ -143,7 +149,7 @@ public class CetakBarcodeController {
         totalBerat.setText(gr.format(berat));
         totalQty.setText(gr.format(qty));
         totalBeratAsli.setText(gr.format(beratAsli));
-        totalBeratLabel.setText(gr.format(beratAsli + (qty * Main.sistem.getBeratLabel())));
+        totalBeratLabel.setText(gr.format(beratAll + (qty * Main.sistem.getBeratLabel())));
     }
 
     @FXML

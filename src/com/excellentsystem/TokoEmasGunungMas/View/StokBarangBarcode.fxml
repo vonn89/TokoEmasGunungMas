@@ -45,10 +45,6 @@
                         <Label fx:id="totalQtyLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
                         <Label alignment="CENTER_RIGHT" layoutX="149.0" layoutY="10.0" prefHeight="25.0" text="Total Berat" />
                         <Label fx:id="totalBeratLabel" alignment="CENTER" layoutX="209.0" layoutY="10.0" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
-                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Berat Asli" />
-                        <Label fx:id="totalBeratAsliLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
-                        <Label alignment="CENTER_RIGHT" prefHeight="25.0" text="Total Berat + Label" />
-                        <Label fx:id="totalBeratLabelLabel" alignment="CENTER" prefHeight="25.0" style="-fx-font-weight: bold;" text="0" />
                      </children>
                   </FlowPane>
                </children>

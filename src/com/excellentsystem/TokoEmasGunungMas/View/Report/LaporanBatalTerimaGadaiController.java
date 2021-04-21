@@ -6,6 +6,8 @@
 package com.excellentsystem.TokoEmasGunungMas.View.Report;
 
 import com.excellentsystem.TokoEmasGunungMas.DAO.GadaiHeadDAO;
+import com.excellentsystem.TokoEmasGunungMas.Function;
+import static com.excellentsystem.TokoEmasGunungMas.Function.getTreeTableCell;
 import com.excellentsystem.TokoEmasGunungMas.Koneksi;
 import com.excellentsystem.TokoEmasGunungMas.Main;
 import static com.excellentsystem.TokoEmasGunungMas.Main.gr;
@@ -13,10 +15,9 @@ import static com.excellentsystem.TokoEmasGunungMas.Main.rp;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglLengkap;
 import static com.excellentsystem.TokoEmasGunungMas.Main.tglSql;
 import com.excellentsystem.TokoEmasGunungMas.Model.GadaiHead;
+import com.excellentsystem.TokoEmasGunungMas.PrintOut.PrintOut;
 import java.sql.Connection;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,18 +25,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.DateCell;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.stage.Modality;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 
 /**
  * FXML Controller class
@@ -105,6 +106,8 @@ public class LaporanBatalTerimaGadaiController {
                 return null;
             }
         });
+        tglGadaiColumn.setComparator(Function.sortDate(tglLengkap));
+
         tglBatalColumn.setCellValueFactory(cellData -> {
             try {
                 return new SimpleStringProperty(
@@ -114,178 +117,83 @@ public class LaporanBatalTerimaGadaiController {
                 return null;
             }
         });
+        tglGadaiColumn.setComparator(Function.sortDate(tglLengkap));
+
         userBatalColumn.setCellValueFactory(param -> param.getValue().getValue().salesBatalProperty());
+        
         kodeSalesColumn.setCellValueFactory(param -> param.getValue().getValue().kodeSalesProperty());
+        
         kodePelangganColumn.setCellValueFactory(param -> param.getValue().getValue().kodePelangganProperty());
+        
         namaColumn.setCellValueFactory(param -> param.getValue().getValue().namaProperty());
+        
         alamatColumn.setCellValueFactory(param -> param.getValue().getValue().alamatProperty());
+        
         noTelpColumn.setCellValueFactory(param -> param.getValue().getValue().noTelpProperty());
+        
         keteranganColumn.setCellValueFactory(param -> param.getValue().getValue().keteranganProperty());
+        
         totalBeratColumn.setCellValueFactory(param -> param.getValue().getValue().totalBeratProperty());
-        totalBeratColumn.setCellFactory(col -> new TreeTableCell<GadaiHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        totalBeratColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         totalPinjamanColumn.setCellValueFactory(param -> param.getValue().getValue().totalPinjamanProperty());
-        totalPinjamanColumn.setCellFactory(col -> new TreeTableCell<GadaiHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
+        totalPinjamanColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         lamaPinjamColumn.setCellValueFactory(param -> param.getValue().getValue().lamaPinjamProperty());
-        lamaPinjamColumn.setCellFactory(col -> new TreeTableCell<GadaiHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        lamaPinjamColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         bungaPersenColumn.setCellValueFactory(param -> param.getValue().getValue().bungaPersenProperty());
-        bungaPersenColumn.setCellFactory(col -> new TreeTableCell<GadaiHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText(gr.format(value.doubleValue()));
-                }
-            }
-        });
+        bungaPersenColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         bungaKompColumn.setCellValueFactory(param -> param.getValue().getValue().bungaKompProperty());
-        bungaKompColumn.setCellFactory(col -> new TreeTableCell<GadaiHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
-        });
+        bungaKompColumn.setCellFactory(col -> getTreeTableCell(gr));
+        
         bungaRpColumn.setCellValueFactory(param -> param.getValue().getValue().bungaRpProperty());
-        bungaRpColumn.setCellFactory(col -> new TreeTableCell<GadaiHead, Number>() {
-            @Override
-            public void updateItem(Number value, boolean empty) {
-                super.updateItem(value, empty);
-                if (empty) {
-                    setText("");
-                } else {
-                    setText(rp.format(value.doubleValue()));
-                }
-            }
+        bungaRpColumn.setCellFactory(col -> getTreeTableCell(gr));
+
+        mulaiTglPicker.setConverter(Function.getTglConverter());
+        mulaiTglPicker.setValue(LocalDate.now());
+        mulaiTglPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellMulai(akhirTglPicker));
+        akhirTglPicker.setConverter(Function.getTglConverter());
+        akhirTglPicker.setValue(LocalDate.now());
+        akhirTglPicker.setDayCellFactory((final DatePicker datePicker) -> Function.getDateCellAkhir(mulaiTglPicker));
+
+        final ContextMenu rowMenu = new ContextMenu();
+        MenuItem cetak = new MenuItem("Print Laporan");
+        cetak.setOnAction((ActionEvent e) -> {
+            printLaporan();
         });
-
-        mulaiTglPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+        MenuItem refresh = new MenuItem("Refresh");
+        refresh.setOnAction((ActionEvent event) -> {
+            getGadai();
         });
-        mulaiTglPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        mulaiTglPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isAfter(akhirTglPicker.getValue())) {
-                            this.setDisable(true);
-                        }
+        rowMenu.getItems().addAll(cetak, refresh);
+        gadaiTable.setContextMenu(rowMenu);
+        gadaiTable.setRowFactory(table -> {
+            TreeTableRow<GadaiHead> row = new TreeTableRow<GadaiHead>() {
+                @Override
+                public void updateItem(GadaiHead item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(rowMenu);
+                    } else {
+                        final ContextMenu rowMenu = new ContextMenu();
+                        MenuItem cetak = new MenuItem("Print Laporan");
+                        cetak.setOnAction((ActionEvent e) -> {
+                            printLaporan();
+                        });
+                        MenuItem refresh = new MenuItem("Refresh");
+                        refresh.setOnAction((ActionEvent event) -> {
+                            getGadai();
+                        });
+                        rowMenu.getItems().addAll(cetak, refresh);
+                        setContextMenu(rowMenu);
                     }
-                };
-            }
-        });
-        akhirTglPicker.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateFormatter.format(date);
-                } else {
-                    return "";
                 }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
-                } else {
-                    return null;
-                }
-            }
+            };
+            return row;
         });
-        akhirTglPicker.setValue(LocalDate.parse(Main.sistem.getTglSystem(), DateTimeFormatter.ISO_DATE));
-        akhirTglPicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(final DatePicker datePicker) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        DayOfWeek day = DayOfWeek.from(item);
-                        if (day == DayOfWeek.SUNDAY) {
-                            this.setStyle("-fx-background-color: derive(RED, 150%);");
-                        }
-                        if (item.equals(LocalDate.now())) {
-                            this.setStyle(" -fx-font-weight:bold;");
-                        }
-                        if (item.isAfter(LocalDate.now())) {
-                            this.setDisable(true);
-                        }
-                        if (item.isBefore(mulaiTglPicker.getValue())) {
-                            this.setDisable(true);
-                        }
-                    }
-                };
-            }
-        });
+        
         allGadai.addListener((ListChangeListener.Change<? extends GadaiHead> change) -> {
             searchGadai();
         });
@@ -398,4 +306,14 @@ public class LaporanBatalTerimaGadaiController {
         totalPinjamanField.setText(rp.format(totalPinjaman));
     }
 
+    private void printLaporan() {
+        try {
+            PrintOut report = new PrintOut();
+            report.printLaporanBatalTerimaGadai(filterData, mulaiTglPicker.getValue().toString(),
+                    akhirTglPicker.getValue().toString(),  searchField.getText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            mainApp.showMessage(Modality.NONE, "Error", e.toString());
+        }
+    }
 }

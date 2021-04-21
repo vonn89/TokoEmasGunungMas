@@ -676,7 +676,6 @@ public class DetailPembelianController {
                         }
                     }
                     mainApp.closeDialog(owner, stage);
-                    mainApp.showPembelian();
                     mainApp.showMessage(Modality.NONE, "Success", "Pembelian berhasil disimpan");
                 } else {
                     mainApp.showMessage(Modality.NONE, "Error", status);

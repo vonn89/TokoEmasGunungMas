@@ -56,7 +56,7 @@
                         <Label fx:id="totalBeratLabel" alignment="CENTER" layoutX="209.0" layoutY="10.0" prefHeight="20.0" style="-fx-font-weight: bold;" text="0" />
                         <Label alignment="CENTER_RIGHT" prefHeight="20.0" text="Total Berat Asli" />
                         <Label fx:id="totalBeratAsliLabel" alignment="CENTER" prefHeight="20.0" style="-fx-font-weight: bold;" text="0" />
-                        <Label alignment="CENTER_RIGHT" prefHeight="20.0" text="Total Berat + Label" />
+                        <Label alignment="CENTER_RIGHT" prefHeight="20.0" text="Total Berat ( Kemasan + Label )" />
                         <Label fx:id="totalBeratLabelLabel" alignment="CENTER" prefHeight="20.0" style="-fx-font-weight: bold;" text="0" />
                         <Label alignment="CENTER_RIGHT" prefHeight="20.0" text="Total Nilai Pokok" />
                         <Label fx:id="totalNilaiPokokLabel" alignment="CENTER" prefHeight="20.0" style="-fx-font-weight: bold;" text="0" />
@@ -83,6 +83,7 @@
                   <TableColumn fx:id="kadarColumn" prefWidth="75.0" text="Kadar" />
                   <TableColumn fx:id="beratColumn" prefWidth="75.0" text="Berat" />
                   <TableColumn fx:id="beratAsliColumn" prefWidth="75.0" text="Berat Asli" />
+                  <TableColumn fx:id="beratKemasanColumn" prefWidth="75.0" text="Berat Kemasan" />
                   <TableColumn fx:id="nilaiPokokColumn" prefWidth="75.0" text="Nilai Pokok" />
                   <TableColumn fx:id="hargaJualColumn" prefWidth="75.0" text="Harga Jual" />
                   <TableColumn fx:id="statusBarangColumn" prefWidth="75.0" text="Status" visible="false" />

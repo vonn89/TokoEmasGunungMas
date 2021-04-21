@@ -47,6 +47,8 @@
                   <Label fx:id="totalBeratField" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
                   <Label layoutX="754.0" layoutY="10.0" prefHeight="30.0" text="Total Berat Asli" />
                   <Label fx:id="totalBeratAsliField" layoutX="854.0" layoutY="10.0" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
+                  <Label layoutX="892.0" layoutY="10.0" prefHeight="30.0" text="Total Berat Kemasan" />
+                  <Label fx:id="totalBeratKemasanField" layoutX="995.0" layoutY="10.0" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
                </children>
             </HBox>
             <TreeTableView fx:id="barcodeBarangHeadTable" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true" GridPane.rowIndex="1">
@@ -62,6 +64,7 @@
                   <TreeTableColumn fx:id="kadarColumn" prefWidth="75.0" text="Kadar" visible="false" />
                   <TreeTableColumn fx:id="beratColumn" prefWidth="75.0" text="Berat" />
                   <TreeTableColumn fx:id="beratAsliColumn" prefWidth="75.0" text="Berat Asli" />
+                  <TreeTableColumn fx:id="beratKemasanColumn" prefWidth="75.0" text="Berat Kemasan" />
                   <TreeTableColumn fx:id="nilaiPokokColumn" prefWidth="75.0" text="Nilai Pokok" visible="false" />
                   <TreeTableColumn fx:id="hargaJualColumn" prefWidth="75.0" text="Harga Jual" visible="false" />
                   <TreeTableColumn fx:id="userBarcodeColumn" prefWidth="75.0" text="User Barcode" />

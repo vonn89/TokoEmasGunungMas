@@ -250,11 +250,10 @@ public class DataUserController {
             levelCombo.getSelectionModel().select("");
 
             List<String> jenis = new ArrayList<>();
-            jenis.add("Stok Barang Dalam");
-            jenis.add("Tambah Barang");
-            jenis.add("Ambil Barang");
+            jenis.add("Dashboard");
+            jenis.add("Data Barang Non Barcode");
             jenis.add("Barcode Barang");
-            jenis.add("Detail Barang Barcode");
+            jenis.add("Data Barang Barcode");
             jenis.add("Stok Barang Barcode");
             jenis.add("Penjualan Baru");
             jenis.add("Data Penjualan");
@@ -272,7 +271,13 @@ public class DataUserController {
             jenis.add("Laporan Keuangan");
             jenis.add("Data Pelanggan");
             jenis.add("Data Sales");
-            jenis.add("Pengaturan Umum");
+            jenis.add("Data User");
+            jenis.add("Data Toko");
+            jenis.add("Data Gudang");
+            jenis.add("Kategori Barang");
+            jenis.add("Jenis Barang");
+            jenis.add("Kategori Transaksi");
+            jenis.add("Pengaturan Gadai");
             List<Otoritas> tempOtoritas = new ArrayList<>();
             for (String jns : jenis) {
                 Otoritas temp = new Otoritas();
@@ -284,6 +289,7 @@ public class DataUserController {
             List<String> ver = new ArrayList<>();
             ver.add("Tambah Barang");
             ver.add("Ambil Barang");
+            ver.add("Edit Barang");
             ver.add("Hancur Barang");
             ver.add("Penjualan");
             ver.add("Batal Penjualan");
@@ -293,7 +299,7 @@ public class DataUserController {
             ver.add("Batal Terima Gadai");
             ver.add("Pelunasan Gadai");
             ver.add("Batal Pelunasan Gadai");
-            ver.add("Batal Keuangan");
+            ver.add("Batal Transaksi");
             List<Verifikasi> tempverifikasi = new ArrayList<>();
             for (String v : ver) {
                 Verifikasi temp = new Verifikasi();

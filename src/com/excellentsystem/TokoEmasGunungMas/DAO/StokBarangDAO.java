@@ -97,7 +97,7 @@ public class StokBarangDAO {
     }
 
     public static List<StokBarang> getStokBarcodeGroupByGudangDate(Connection con, String date) throws Exception {
-        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang,"
+        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang, "
                 + "sum(berat_awal),sum(berat_asli_awal),sum(stok_awal),"
                 + "sum(berat_masuk),sum(berat_asli_masuk),sum(stok_masuk),"
                 + "sum(berat_keluar),sum(berat_asli_keluar),sum(stok_keluar),"
@@ -131,7 +131,7 @@ public class StokBarangDAO {
     }
 
     public static List<StokBarang> getStokBarcodeGroupByKategoriDate(Connection con, String date) throws Exception {
-        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang,"
+        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang, "
                 + "sum(berat_awal),sum(berat_asli_awal),sum(stok_awal),"
                 + "sum(berat_masuk),sum(berat_asli_masuk),sum(stok_masuk),"
                 + "sum(berat_keluar),sum(berat_asli_keluar),sum(stok_keluar),"
@@ -165,7 +165,7 @@ public class StokBarangDAO {
     }
 
     public static List<StokBarang> getKartuStokBarangBarcode(Connection con, String periode, String kodeGudang, String kodeKategori, String kodeJenis) throws Exception {
-        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang,"
+        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang, "
                 + "sum(berat_awal),sum(berat_asli_awal),sum(stok_awal),"
                 + "sum(berat_masuk),sum(berat_asli_masuk),sum(stok_masuk),"
                 + "sum(berat_keluar),sum(berat_asli_keluar),sum(stok_keluar),"
@@ -220,7 +220,7 @@ public class StokBarangDAO {
     }
 
     public static List<StokBarang> getKartuStokBarangDalam(Connection con, String periode, String kodeJenis) throws Exception {
-        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang,"
+        PreparedStatement ps = con.prepareStatement("select tanggal,kode_barcode,kode_kategori,kode_jenis,kode_gudang, "
                 + "sum(berat_awal),sum(berat_asli_awal),sum(stok_awal),"
                 + "sum(berat_masuk),sum(berat_asli_masuk),sum(stok_masuk),"
                 + "sum(berat_keluar),sum(berat_asli_keluar),sum(stok_keluar),"

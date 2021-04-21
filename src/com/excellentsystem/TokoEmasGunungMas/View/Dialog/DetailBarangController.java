@@ -41,6 +41,8 @@ public class DetailBarangController {
     @FXML
     private TextField beratAsliField;
     @FXML
+    public TextField beratKemasanField;
+    @FXML
     private TextField tglBarcodeField;
     @FXML
     private TextField userBarcodeField;
@@ -67,6 +69,7 @@ public class DetailBarangController {
     public void initialize() {
         Function.setRpField(nilaiPokokField);
         Function.setRpField(hargaJualField);
+        Function.setBeratField(beratKemasanField);
     }
 
     public void setMainApp(Main mainApp, Stage owner, Stage stage) {
@@ -90,6 +93,7 @@ public class DetailBarangController {
             kadarField.setText(b.getKadar());
             beratField.setText(gr.format(b.getBerat()));
             beratAsliField.setText(gr.format(b.getBeratAsli()));
+            beratKemasanField.setText(gr.format(b.getBeratKemasan()));
             tglBarcodeField.setText(tglLengkap.format(tglSql.parse(b.getBarcodeDate())));
             userBarcodeField.setText(b.getBarcodeBy());
             if (!b.getSoldDate().startsWith("2000-01-01")) {
@@ -111,6 +115,7 @@ public class DetailBarangController {
         namaBarangField.setDisable(true);
         keteranganField.setDisable(true);
         kodeInternField.setDisable(true);
+        beratKemasanField.setDisable(true);
         kadarField.setDisable(true);
         beratField.setDisable(true);
         nilaiPokokField.setDisable(true);
