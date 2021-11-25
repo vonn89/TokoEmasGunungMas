@@ -35,6 +35,8 @@ public class MainController {
     private VBox vbox;
     @FXML
     private Label title;
+    @FXML
+    private Label kodeCabangLabel;
 
     @FXML
     private Accordion accordion;
@@ -164,6 +166,7 @@ public class MainController {
                 n.managedProperty().bind(n.visibleProperty());
             }
             title.setText(sistem.getNamaToko());
+            kodeCabangLabel.setText(Main.kodeToko);
             setUser();
         } catch (Exception e) {
             mainApp.showMessage(Modality.NONE, "Error", e.toString());

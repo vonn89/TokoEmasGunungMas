@@ -743,6 +743,12 @@ public class Service {
                 d.setNoUrut(noUrut);
                 PembelianDetailDAO.insert(con, d);
                 noUrut++;
+                
+                if(d.getKodeBarcode()!=null){
+                    PenjualanDetail pjl = PenjualanDetailDAO.getByKodeBarcode(con, d.getKodeBarcode());
+                    pjl.setNoPembelian(p.getNoPembelian());
+                    PenjualanDetailDAO.update(con, pjl);
+                }
             }
             
             if (status.equals("true")) {

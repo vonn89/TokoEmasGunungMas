@@ -254,18 +254,20 @@ public class LaporanKeuanganController {
                         total = total + detail.getJumlahRp();
                         parent.getChildren().addAll(child);
                     }
-                } 
+                }
             }
             parent.getValue().setJumlahRp(total);
             root.getChildren().add(parent);
         }
         keuanganTable.setRoot(root);
     }
+
     private void printLaporan() {
         try {
             PrintOut report = new PrintOut();
             report.printLaporanKeuangan(filterData, tglMulaiPicker.getValue().toString(),
-                    tglAkhirPicker.getValue().toString(), groupByCombo.getSelectionModel().getSelectedItem(), searchField.getText());
+                    tglAkhirPicker.getValue().toString(), Double.parseDouble(saldoAwalField.getText().replaceAll(",", "")), 
+                    groupByCombo.getSelectionModel().getSelectedItem(), searchField.getText());
         } catch (Exception e) {
             e.printStackTrace();
             mainApp.showMessage(Modality.NONE, "Error", e.toString());

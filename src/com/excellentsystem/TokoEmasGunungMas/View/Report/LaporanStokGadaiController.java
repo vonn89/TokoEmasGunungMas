@@ -77,6 +77,8 @@ public class LaporanStokGadaiController {
     @FXML
     private TextField searchField;
     @FXML
+    private Label totalQtyField;
+    @FXML
     private Label totalBeratField;
     @FXML
     private Label totalPinjamanField;
@@ -251,6 +253,7 @@ public class LaporanStokGadaiController {
                 groupBy.add(temp.getTglGadai().substring(0, 10));
             }
         }
+        double totalQty = 0;
         double totalBerat = 0;
         double totalPinjaman = 0;
         double totalBungaKomp = 0;
@@ -268,6 +271,7 @@ public class LaporanStokGadaiController {
                     berat = berat + detail.getTotalBerat();
                     pinjaman = pinjaman + detail.getTotalPinjaman();
                     bungaKomp = bungaKomp + detail.getBungaKomp();
+                    totalQty = totalQty + 1;
                     totalBerat = totalBerat + detail.getTotalBerat();
                     totalPinjaman = totalPinjaman + detail.getTotalPinjaman();
                     totalBungaKomp = totalBungaKomp + detail.getBungaKomp();
@@ -279,6 +283,7 @@ public class LaporanStokGadaiController {
             root.getChildren().add(parent);
         }
         gadaiTable.setRoot(root);
+        totalQtyField.setText(rp.format(totalQty));
         totalBeratField.setText(gr.format(totalBerat));
         totalPinjamanField.setText(rp.format(totalPinjaman));
         totalBungaKompField.setText(rp.format(totalBungaKomp));

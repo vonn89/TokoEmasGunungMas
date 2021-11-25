@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a2684c4c-28ad-473d-ba67-363a0791bd3b">
 	<property name="ireport.zoom" value="1.6528925619834725"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="324"/>
 	<property name="ireport.y" value="0"/>
 	<style name="columnHeader" mode="Opaque" forecolor="#FFFFFF" backcolor="#404040">
 		<box leftPadding="5" rightPadding="5">
@@ -25,6 +25,9 @@
 	<parameter name="tanggal" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="groupBy" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="search" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="saldoAwal" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -180,7 +183,7 @@
 		</band>
 	</title>
 	<columnHeader>
-		<band height="30">
+		<band height="50">
 			<staticText>
 				<reportElement style="columnHeader" x="485" y="0" width="70" height="30" uuid="b776097f-c644-43d2-96f7-b0829058ff98"/>
 				<textElement verticalAlignment="Middle">
@@ -222,6 +225,20 @@
 					<font fontName="Serif"/>
 				</textElement>
 				<text><![CDATA[Deskripsi]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader1" x="385" y="30" width="170" height="20" uuid="aa95b6a7-765d-46a8-8963-258378e0f547"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAwal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="groupHeader1" x="0" y="30" width="385" height="20" uuid="f73b445d-1fe8-4c18-af20-22758404880f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Awal]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -350,7 +367,7 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="20">
+		<band height="39">
 			<staticText>
 				<reportElement style="columnHeader" x="0" y="0" width="385" height="20" uuid="6768c51a-0eca-48da-87a6-6cd8b002280c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -368,6 +385,20 @@
 			<staticText>
 				<reportElement style="columnHeader" x="485" y="0" width="70" height="20" uuid="696ac7ca-3127-415a-bd15-f0f8cf108bb7"/>
 				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement style="groupHeader1" x="385" y="19" width="170" height="20" uuid="6bfa9ea2-188c-44d9-9996-a447478de678"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{saldoAwal}+$V{grandtotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="groupHeader1" x="0" y="19" width="385" height="20" uuid="8222240c-0813-46f8-a404-d5615d778e13"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo Akhir]]></text>
 			</staticText>
 		</band>
 	</summary>

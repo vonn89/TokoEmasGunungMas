@@ -140,7 +140,6 @@ public class Main extends Application {
         try {
             BufferedReader in = new BufferedReader(new FileReader("koneksi.txt"));
             ipServer = in.readLine();
-            kodeToko = in.readLine();
             printerPenjualan = in.readLine();
             printerGadai = in.readLine();
             printerBarcode = in.readLine();
@@ -177,7 +176,7 @@ public class Main extends Application {
         }
     }
 
-    private void tutupToko() {
+    public void tutupToko() {
         try (Connection con = Koneksi.getConnection()) {
             while (tglBarang.parse(sistem.getTglSystem()).before(
                     tglBarang.parse(tglBarang.format(new Date())))) {
@@ -209,10 +208,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            setSistem();
-            tutupToko();
             MainStage = stage;
-            MainStage.setTitle(sistem.getNamaToko());
+            MainStage.setTitle("TOKO EMAS GUNUNG MAS");
             MainStage.setMaximized(true);
             MainStage.getIcons().add(new Image(Main.class.getResourceAsStream("Resource/logo.png")));
             screenSize = Toolkit.getDefaultToolkit().getScreenSize();

@@ -229,7 +229,7 @@ public class AddBarangTerjualController {
     public void getPenjualanDetail() {
         try (Connection con = Koneksi.getConnection()) {
             allPenjualanDetail.clear();
-            List<PenjualanDetail> listPenjualanDetail = PenjualanDetailDAO.getAllByTglPenjualanAndStatus(con,
+            List<PenjualanDetail> listPenjualanDetail = PenjualanDetailDAO.getAllByTglPenjualanAndStatusAndNoBuyBack(con,
                     tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");
             List<PenjualanHead> listPenjualanHead = PenjualanHeadDAO.getAllByTglPenjualanAndStatus(con,
                     tglMulaiPicker.getValue().toString(), tglAkhirPicker.getValue().toString(), "true");

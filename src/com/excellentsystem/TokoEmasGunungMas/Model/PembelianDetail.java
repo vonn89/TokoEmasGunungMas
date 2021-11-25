@@ -27,7 +27,17 @@ public class PembelianDetail {
     private final DoubleProperty hargaKomp = new SimpleDoubleProperty();
     private final DoubleProperty hargaBeli = new SimpleDoubleProperty();
     private PembelianHead pembelian;
+    private String kodeBarcode;
 
+    public String getKodeBarcode() {
+        return kodeBarcode;
+    }
+
+    public void setKodeBarcode(String kodeBarcode) {
+        this.kodeBarcode = kodeBarcode;
+    }
+    
+    
     public String getKodeJenis() {
         return kodeJenis.get();
     }

@@ -127,6 +127,7 @@ public class DetailPembelianController {
 
     private Pelanggan plg;
     private List<Kategori> kategori;
+    private String kodeBarcode = null;
     private ObservableList<PembelianDetail> allDetail = FXCollections.observableArrayList();
     private Main mainApp;
     private Stage stage;
@@ -373,6 +374,12 @@ public class DetailPembelianController {
     }
 
     private void addDetail() {
+        boolean status = true;
+        for (PembelianDetail temp : allDetail) {
+            if(temp.getKodeBarcode().equals(kodeBarcode))
+                status= false;
+        }
+        if(status){
         double hb = 0;
         for (Kategori k : kategori) {
             if (k.getKodeKategori().equals(kodeJenisCombo.getSelectionModel().getSelectedItem().getKodeKategori())) {
@@ -388,6 +395,10 @@ public class DetailPembelianController {
         d.setHargaKomp(hb);
         d.setHargaBeli(Double.parseDouble(hargaBeliField.getText().replaceAll(",", "")));
         allDetail.add(d);
+        if (kodeBarcode != null) {
+            d.setKodeBarcode(kodeBarcode);
+            kodeBarcode = null;
+        }
         detailTable.refresh();
         hitungTotal();
         kodeJenisCombo.getSelectionModel().select(null);
@@ -396,6 +407,9 @@ public class DetailPembelianController {
         beratBersihField.setText("0");
         hargaBeliField.setText("0");
         kodeJenisCombo.requestFocus();
+        }else{
+            mainApp.showMessage(Modality.NONE, "Warning", "Barang terjual sudah pernah diinput");
+        }
     }
 
     @FXML
@@ -631,6 +645,7 @@ public class DetailPembelianController {
             beratKotorField.setText(gr.format(d.getBerat()));
             beratBersihField.setText(gr.format(d.getBerat()));
             getHargaBeli();
+            kodeBarcode = d.getKodeBarcode();
         }
     }
 

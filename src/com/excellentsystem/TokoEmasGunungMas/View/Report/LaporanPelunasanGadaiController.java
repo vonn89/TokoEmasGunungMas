@@ -86,6 +86,8 @@ public class LaporanPelunasanGadaiController {
     @FXML
     private ComboBox<String> groupByCombo;
     @FXML
+    private Label totalQtyField;
+    @FXML
     private Label totalBeratField;
     @FXML
     private Label totalPinjamanField;
@@ -293,6 +295,7 @@ public class LaporanPelunasanGadaiController {
                 }
             }
         }
+        double totalQty = 0;
         double totalBerat = 0;
         double totalPinjaman = 0;
         double totalBungaKomp = 0;
@@ -310,6 +313,7 @@ public class LaporanPelunasanGadaiController {
                     if (temp.equals(detail.getTglLunas().substring(0, 10))) {
                         TreeItem<GadaiHead> child = new TreeItem<>(detail);
                         parent.getChildren().addAll(child);
+                        totalQty = totalQty + 1;
                         berat = berat + detail.getTotalBerat();
                         pinjaman = pinjaman + detail.getTotalPinjaman();
                         bungaKomp = bungaKomp + detail.getBungaKomp();
@@ -323,6 +327,7 @@ public class LaporanPelunasanGadaiController {
                     if (temp.equals(detail.getSalesLunas())) {
                         TreeItem<GadaiHead> child = new TreeItem<>(detail);
                         parent.getChildren().addAll(child);
+                        totalQty = totalQty + 1;
                         berat = berat + detail.getTotalBerat();
                         pinjaman = pinjaman + detail.getTotalPinjaman();
                         bungaKomp = bungaKomp + detail.getBungaKomp();
@@ -341,6 +346,7 @@ public class LaporanPelunasanGadaiController {
             root.getChildren().add(parent);
         }
         gadaiTable.setRoot(root);
+        totalQtyField.setText(gr.format(totalQty));
         totalBeratField.setText(gr.format(totalBerat));
         totalPinjamanField.setText(rp.format(totalPinjaman));
         totalBungaKompField.setText(rp.format(totalBungaKomp));

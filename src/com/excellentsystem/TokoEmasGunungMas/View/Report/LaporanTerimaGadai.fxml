@@ -45,6 +45,8 @@
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.rowIndex="2">
                <children>
+                  <Label layoutX="653.0" layoutY="10.0" prefHeight="30.0" text="Total Qty" />
+                  <Label fx:id="totalQtyField" layoutX="730.0" layoutY="10.0" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
                   <Label prefHeight="30.0" text="Total Berat" />
                   <Label fx:id="totalBeratField" prefHeight="30.0" style="-fx-font-weight: bold;" text="0" />
                   <Label prefHeight="30.0" text="Total Pinjaman" />

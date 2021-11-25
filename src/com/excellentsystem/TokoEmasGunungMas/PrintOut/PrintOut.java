@@ -390,7 +390,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAmbilBarang);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -426,7 +426,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listTambahBarang);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -453,7 +453,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listBarcodeBarang);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -469,7 +469,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanPindahGudang.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listPindahDetail);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -484,7 +484,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanCetakBarcode.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listCetakBarcode);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -499,7 +499,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanHancurBarang.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listHancur);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -534,7 +534,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listPenjualanDetail);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -550,7 +550,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanBatalJual.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listPenjualanDetail);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -585,7 +585,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listPembelianDetail);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -601,7 +601,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanBatalPembelian.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listPembelianDetail);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -627,7 +627,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listGadaiHead);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -654,7 +654,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listGadaiHead);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -673,7 +673,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanStokGadai.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listGadaiHead);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -691,7 +691,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanBatalTerimaGadai.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listGadaiHead);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -699,7 +699,7 @@ public class PrintOut {
         JRViewerFx jrViewerFx = new JRViewerFx(jasperPrint);
     }
 
-    public void printLaporanKeuangan(List<Keuangan> listKeuangan, String tglMulai, String tglAkhir, String groupBy, String search
+    public void printLaporanKeuangan(List<Keuangan> listKeuangan, String tglMulai, String tglAkhir, double saldoAwal, String groupBy, String search
     ) throws Exception {
         JasperDesign jasperDesign = null;
         if (groupBy.equals("Tanggal")) {
@@ -720,9 +720,10 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listKeuangan);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("groupBy", groupBy);
+        hash.put("saldoAwal", saldoAwal);
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, hash, beanColDataSource);
@@ -742,7 +743,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanTransaksiSales.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listKeuangan);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tglMulai)) + " - " + tglNormal.format(tglBarang.parse(tglAkhir)));
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -763,7 +764,7 @@ public class PrintOut {
         jasperDesign = JRXmlLoader.load(getClass().getResourceAsStream("LaporanBarang.jrxml"));
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listBarcodeBarang);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("search", search);
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, hash, beanColDataSource);
@@ -794,7 +795,7 @@ public class PrintOut {
         }
         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listBarcodeBarang);
         Map hash = new HashMap();
-        hash.put("kodeCabang", "Gunung Mas");
+        hash.put("kodeCabang", Main.kodeToko);
         hash.put("tanggal", tglNormal.format(tglBarang.parse(tanggal)));
         hash.put("groupBy", groupBy);
         hash.put("search", search);
@@ -862,7 +863,7 @@ public class PrintOut {
                         + "<ESC>H0000<ESC>V0023<ESC>BG01050" + b.getKodeBarcode()
                         + "<ESC>H0000<ESC>V0095<ESC>S" + b.getNamaBarang()
                         + "<ESC>H0020<ESC>V0120<ESC>L0102<ESC>M" + gr.format(b.getBerat()) + "<ESC>L0102<ESC>S gr"
-                        + "<ESC>H0000<ESC>V0160<ESC>L0101<ESC>S" + b.getKodeJenis() + "<ESC>H0110<ESC>V0160<ESC>S" + b.getKodeIntern();
+                        + "<ESC>H0000<ESC>V0160<ESC>L0101<ESC>S" + b.getKodeJenis() + "-" + gr.format(b.getBeratKemasan()) + "<ESC>H0110<ESC>V0160<ESC>S" + b.getKodeIntern();
                 if (listBarang.size() == i + 1) {
                 } else {
                     Barang b2 = listBarang.get(i + 1);
@@ -870,7 +871,7 @@ public class PrintOut {
                             + "<ESC>H0455<ESC>V0023<ESC>BG01050" + b2.getKodeBarcode()
                             + "<ESC>H0455<ESC>V0095<ESC>S" + b2.getNamaBarang()
                             + "<ESC>H0475<ESC>V0120<ESC>L0102<ESC>M" + gr.format(b2.getBerat()) + "<ESC>L0102<ESC>S gr"
-                            + "<ESC>H0455<ESC>V0160<ESC>L0101<ESC>S" + b2.getKodeJenis() + "<ESC>H0565<ESC>V0160<ESC>S" + b2.getKodeIntern();
+                            + "<ESC>H0455<ESC>V0160<ESC>L0101<ESC>S" + b2.getKodeJenis() + "-" + gr.format(b2.getBeratKemasan()) + "<ESC>H0565<ESC>V0160<ESC>S" + b2.getKodeIntern();
                 }
                 commands = commands + "<ESC>Q1<ESC>Z";
                 char ch = 27;
